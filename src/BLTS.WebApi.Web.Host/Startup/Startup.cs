@@ -146,11 +146,11 @@ namespace BLTS.WebApi.Web.Host.Startup
       app.UseSwaggerUI(options =>
       {
         // specifying the Swagger JSON endpoint.
-        //options.DocumentTitle = "BLTS Web API";
         options.SwaggerEndpoint($"/swagger/{_apiVersion}/swagger.json", $"BLTS Web API {_apiVersion}");
         options.IndexStream = () => Assembly.GetExecutingAssembly()
                   .GetManifestResourceStream("BLTS.WebApi.Web.Host.wwwroot.swagger.ui.index.html");
         options.DisplayRequestDuration(); // Controls the display of the request duration (in milliseconds) for "Try it out" requests.  
+        options.DocumentTitle = "BLTS Web API";
       }); // URL: /swagger
     }
   }
