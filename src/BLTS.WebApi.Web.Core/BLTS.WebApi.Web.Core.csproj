@@ -18,14 +18,12 @@
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BLTS.WebApi.Application\BLTS.WebApi.Application.csproj" />
-    <ProjectReference Include="..\BLTS.WebApi.EntityFrameworkCore\BLTS.WebApi.EntityFrameworkCore.csproj" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.4" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
-    <PackageReference Include="Abp.AspNetCore" Version="5.8.0" />
-    <PackageReference Include="Abp.ZeroCore" Version="5.8.0" />
-    <PackageReference Include="Abp.AspNetCore.SignalR" Version="5.8.0" />
+    <ProjectReference Include="..\BLTS.WebApi.Application\BLTS.WebApi.Application.csproj" />
+    <ProjectReference Include="..\BLTS.WebUi.Infrastructure\BLTS.WebUi.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

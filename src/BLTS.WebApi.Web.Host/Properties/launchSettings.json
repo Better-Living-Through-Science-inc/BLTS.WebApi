@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "BLTS.WebApi.Web.Host": {
+    "BLTS.WebApi.Web": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "http://localhost:21021",
