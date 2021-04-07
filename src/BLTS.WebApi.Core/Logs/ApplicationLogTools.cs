@@ -104,6 +104,7 @@ namespace BLTS.WebApi.Logs
             {
                 ApplicationLog currentLogEntry = new ApplicationLog
                 {
+                    ApplicationId = actionDictionary.ContainsKey("ApplicationId") ? actionDictionary["ApplicationId"] : _configurationManager.GetCurrentApplicationId(),
                     ApplicationName = $"{_configurationManager.GetValue("ApplicationName")} ver. {_configurationManager.GetValue("ApplicationVersion")}",
                     EnvironmentName = _configurationManager.GetValue("EnvironmentName"),
                     ExecutionTime = DateTime.Now.ToUniversalTime(),
@@ -138,7 +139,7 @@ namespace BLTS.WebApi.Logs
                     case EventLogEntryType.Error:
                         {
                             currentLogEntry.Description = $"{_configurationManager.GetValue("ApplicationNameInErrorLog")} - Error Detected";
-                            currentLogEntry.ExceptionStacktrace = logText.Length <= 2000 ? logText : logText.Substring(0, 2000);
+                            currentLogEntry.ExceptionStacktrace = logText.Length <= 4000 ? logText : logText.Substring(0, 4000);
 
                             break;
                         }

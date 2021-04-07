@@ -10,7 +10,13 @@
     [CreationDate]            DATETIME2 (7)  CONSTRAINT [DF_NavigationMenu_CreationDate] DEFAULT (sysutcdatetime()) NOT NULL,
     [LastModificationDate]    DATETIME2 (7)  CONSTRAINT [DF_NavigationMenu_LastModificationDate] DEFAULT (sysutcdatetime()) NOT NULL,
     [IsDeleted]               BIT            CONSTRAINT [DF_NavigationMenu_IsDeleted] DEFAULT ((0)) NOT NULL,
-    CONSTRAINT [PK_NavigationMenu] PRIMARY KEY CLUSTERED ([NavigationMenuId] ASC),
+    CONSTRAINT [PK_NavigationMenu] PRIMARY KEY CLUSTERED ([NavigationMenuId] ASC) WITH (FILLFACTOR = 90, ALLOW_PAGE_LOCKS = OFF, PAD_INDEX = ON, DATA_COMPRESSION = ROW),
     CONSTRAINT [FK_NavigationMenu_WebpageContent] FOREIGN KEY ([WebpageContentId]) REFERENCES [dbo].[WebpageContent] ([WebpageContentId])
 );
+
+
+GO
+ALTER TABLE [dbo].[NavigationMenu] SET (LOCK_ESCALATION = AUTO);
+
+
 

@@ -1,10 +1,9 @@
-﻿using BLTS.WebApi.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BLTS.WebApi.DtoModels
 {
-    interface IApiController<TEntity, TDtoEntity, TPrimaryKey, TDeleteDtoEntity>
+    interface IApiControllerBase<TEntity, TDtoEntity, TPrimaryKey, TDeleteDtoEntity>
     {
         /// <summary>
         /// Get object by Primary key reference

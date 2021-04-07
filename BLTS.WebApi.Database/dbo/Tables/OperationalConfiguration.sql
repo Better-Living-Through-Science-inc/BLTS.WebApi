@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[OperationalConfiguration] (
     [OperationalConfigurationId] BIGINT           IDENTITY (1, 1) NOT NULL,
-    [WebsiteId]                  BIGINT           NOT NULL,
+    [ApplicationId]              BIGINT           NOT NULL,
     [PropertyName]               NVARCHAR (255)   NOT NULL,
     [Description]                NVARCHAR (512)   NOT NULL,
     [BoolValue]                  BIT              NULL,
@@ -15,8 +15,8 @@
     [CreationDate]               DATETIME2 (7)    CONSTRAINT [DF_OperationalConfiguration_CreationDate] DEFAULT (sysutcdatetime()) NOT NULL,
     [LastModificationDate]       DATETIME2 (7)    CONSTRAINT [DF_OperationalConfiguration_LastModificationDate] DEFAULT (sysutcdatetime()) NOT NULL,
     [IsDeleted]                  BIT              CONSTRAINT [DF_OperationalConfiguration_IsDeleted] DEFAULT ((0)) NOT NULL,
-    CONSTRAINT [PK_OperationalConfiguration] PRIMARY KEY CLUSTERED ([OperationalConfigurationId] ASC) WITH (FILLFACTOR = 90, ALLOW_PAGE_LOCKS = OFF, PAD_INDEX = ON),
-    CONSTRAINT [FK_OperationalConfiguration_Website] FOREIGN KEY ([WebsiteId]) REFERENCES [dbo].[Website] ([WebsiteId])
+    CONSTRAINT [PK_OperationalConfiguration] PRIMARY KEY CLUSTERED ([OperationalConfigurationId] ASC) WITH (FILLFACTOR = 90, ALLOW_PAGE_LOCKS = OFF, PAD_INDEX = ON, DATA_COMPRESSION = ROW),
+    CONSTRAINT [FK_OperationalConfiguration_Application] FOREIGN KEY ([ApplicationId]) REFERENCES [dbo].[Application] ([ApplicationId])
 );
 
 
@@ -24,7 +24,18 @@ GO
 ALTER TABLE [dbo].[OperationalConfiguration] SET (LOCK_ESCALATION = AUTO);
 
 
+
+
+
+
+
+GO
+
+
+
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [UX_OperationalConfiguration_PropertyName]
-    ON [dbo].[OperationalConfiguration]([PropertyName] ASC) WITH (FILLFACTOR = 90, ALLOW_PAGE_LOCKS = OFF, PAD_INDEX = ON);
+    ON [dbo].[OperationalConfiguration]([PropertyName] ASC) WITH (FILLFACTOR = 90, ALLOW_PAGE_LOCKS = OFF, PAD_INDEX = ON, DATA_COMPRESSION = ROW);
+
+
 

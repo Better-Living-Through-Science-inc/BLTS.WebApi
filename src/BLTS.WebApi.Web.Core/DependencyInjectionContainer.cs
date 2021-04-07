@@ -30,7 +30,7 @@ namespace BLTS.WebApi.Web.Core
         {
             /*Application Services*/
             _services.AddTransient<IApplicationLogTools, ApplicationLogTools>();
-            _services.AddSingleton<ConfigurationManager>();
+            _services.AddTransient<ConfigurationManager>();
             _services.AddTransient<FileStorageManager>();
             _services.AddTransient<IMapper, Mapper>();
             _services.AddTransient<ReflectionTools>();
@@ -44,7 +44,7 @@ namespace BLTS.WebApi.Web.Core
             _services.AddTransient<IRepository<NavigationMenu, long>, Repository<NavigationMenu, long, WebDbContext>>();
             _services.AddTransient<IRepository<OperationalConfiguration, long>, Repository<OperationalConfiguration, long, WebDbContext>>();
             _services.AddTransient<IRepository<WebpageContent, long>, Repository<WebpageContent, long, WebDbContext>>();
-            _services.AddTransient<IRepository<Website, long>, Repository<Website, long, WebDbContext>>();
+            _services.AddTransient<IRepository<Application, long>, Repository<Application, long, WebDbContext>>();
 
             /*Api Repository Models*/
             //_services.AddTransient<IApiRepository<Weather, WeatherDto, CreateUpdateWeatherDto, long>, ApiRepository<Weather, WeatherDto, CreateUpdateWeatherDto, long>>();

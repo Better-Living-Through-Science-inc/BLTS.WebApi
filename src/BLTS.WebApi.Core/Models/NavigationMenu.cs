@@ -7,8 +7,8 @@ namespace BLTS.WebApi.Models
         public NavigationMenu()
         {
             IsEnabled = true;
-            NavigationMenuNavigationMenuChildNavigationMenuCollection = new HashSet<NavigationMenuNavigationMenu>();
-            NavigationMenuNavigationMenuParentNavigationMenuCollection = new HashSet<NavigationMenuNavigationMenu>();
+            ChildNavigationMenuCollection = new HashSet<NavigationMenuNavigationMenu>();
+            ParentNavigationMenuCollection = new HashSet<NavigationMenuNavigationMenu>();
             WebsiteNavigationMenuCollection = new HashSet<WebsiteNavigationMenu>();
         }
 
@@ -21,8 +21,8 @@ namespace BLTS.WebApi.Models
         public bool IsEnabled { get; set; }
 
         public virtual WebpageContent WebpageContent { get; set; }
-        public virtual ICollection<NavigationMenuNavigationMenu> NavigationMenuNavigationMenuChildNavigationMenuCollection { get; set; }
-        public virtual ICollection<NavigationMenuNavigationMenu> NavigationMenuNavigationMenuParentNavigationMenuCollection { get; set; }
+        public virtual ICollection<NavigationMenuNavigationMenu> ChildNavigationMenuCollection { get; set; }
+        public virtual ICollection<NavigationMenuNavigationMenu> ParentNavigationMenuCollection { get; set; }
         public virtual ICollection<WebsiteNavigationMenu> WebsiteNavigationMenuCollection { get; set; }
     }
 }

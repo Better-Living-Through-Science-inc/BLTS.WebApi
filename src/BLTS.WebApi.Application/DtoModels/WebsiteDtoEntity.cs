@@ -6,6 +6,7 @@
         {
         }
 
+        public long ApplicationId { get; set; }
         public string Name { get; set; }
         public string Metatag { get; set; }
         public string Title { get; set; }

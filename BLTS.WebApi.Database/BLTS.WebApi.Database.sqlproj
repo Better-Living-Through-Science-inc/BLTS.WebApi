@@ -60,6 +60,8 @@
     <Folder Include="dbo\Tables\" />
     <Folder Include="Storage\" />
     <Folder Include="Security\" />
+    <Folder Include="Log\" />
+    <Folder Include="Log\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Blts.Web.DB.publish.xml" />
@@ -86,5 +88,6 @@
     <Build Include="dbo\Tables\NavigationMenu.sql" />
     <Build Include="dbo\Tables\FileStorage.sql" />
     <Build Include="Security\User.sql" />
+    <Build Include="dbo\Tables\Application.sql" />
   </ItemGroup>
 </Project>

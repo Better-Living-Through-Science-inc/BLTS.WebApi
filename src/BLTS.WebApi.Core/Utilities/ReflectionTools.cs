@@ -12,6 +12,11 @@ namespace BLTS.WebApi.Utilities
 {
     public class ReflectionTools
     {
+        public ReflectionTools()
+        {
+
+        }
+
         /// <summary>
         /// converts object of type object into object of type TEntity using CultureInfo("en-US")
         /// </summary>

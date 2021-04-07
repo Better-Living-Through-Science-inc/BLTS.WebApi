@@ -17,21 +17,21 @@ namespace BLTS.WebApi.Logs
 
 
         [HttpPost]
-        public void LogError(string logText, string callerClassName = null, string callerMemberName = null)
+        public async void LogError(long applicationId, string logText, string callerClassName = null, string callerMemberName = null)
         {
-            _applicationLogTools.LogError(logText, new Dictionary<string, dynamic> { { "ClassName", callerClassName } }, callerMemberName);
+            _applicationLogTools.LogError(logText, new Dictionary<string, dynamic> { { "ClassName", callerClassName }, { "ApplicationId", applicationId } }, callerMemberName);
         }
 
         [HttpPost]
-        public void LogInformation(string logText, string callerClassName = null, string callerMemberName = null)
+        public async void LogInformation(long applicationId, string logText, string callerClassName = null, string callerMemberName = null)
         {
-            _applicationLogTools.LogInformation(logText, new Dictionary<string, dynamic> { { "ClassName", callerClassName } }, callerMemberName);
+            _applicationLogTools.LogInformation(logText, new Dictionary<string, dynamic> { { "ClassName", callerClassName }, { "ApplicationId" , applicationId } }, callerMemberName);
         }
 
         [HttpPost]
-        public void LogWarning(string logText, string callerClassName = null, string callerMemberName = null)
+        public async void LogWarning(long applicationId, string logText, string callerClassName = null, string callerMemberName = null)
         {
-            _applicationLogTools.LogWarning(logText, new Dictionary<string, dynamic> { { "ClassName", callerClassName } }, callerMemberName);
+            _applicationLogTools.LogWarning(logText, new Dictionary<string, dynamic> { { "ClassName", callerClassName }, { "ApplicationId", applicationId } }, callerMemberName);
         }
     }
 }

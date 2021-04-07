@@ -91,8 +91,8 @@ namespace BLTS.WebApi.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
+                //endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                //endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
             });
 
             // Enable middleware to serve generated Swagger as a JSON endpoint

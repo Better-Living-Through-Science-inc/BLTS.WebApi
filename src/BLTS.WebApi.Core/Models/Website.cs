@@ -6,11 +6,10 @@ namespace BLTS.WebApi.Models
     {
         public Website()
         {
-            ApplicationLogCollection = new HashSet<ApplicationLog>();
-            OperationalConfigurationCollection = new HashSet<OperationalConfiguration>();
             WebsiteNavigationMenuCollection = new HashSet<WebsiteNavigationMenu>();
         }
 
+        public long ApplicationId { get; set; }
         public string Name { get; set; }
         public string Metatag { get; set; }
         public string Title { get; set; }
@@ -21,8 +20,7 @@ namespace BLTS.WebApi.Models
         public string PocNumber { get; set; }
         public string CssThemePath { get; set; }
 
-        public virtual ICollection<ApplicationLog> ApplicationLogCollection { get; set; }
-        public virtual ICollection<OperationalConfiguration> OperationalConfigurationCollection { get; set; }
+        public virtual Application Application { get; set; }
         public virtual ICollection<WebsiteNavigationMenu> WebsiteNavigationMenuCollection { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace BLTS.WebApi.Infrastructure.Database
         public virtual DbSet<NavigationMenuNavigationMenu> NavigationMenuNavigationMenus { get; set; }
         public virtual DbSet<OperationalConfiguration> OperationalConfigurations { get; set; }
         public virtual DbSet<WebpageContent> WebpageContents { get; set; }
-        public virtual DbSet<Website> Websites { get; set; }
+        public virtual DbSet<Application> Websites { get; set; }
         public virtual DbSet<WebsiteNavigationMenu> WebsiteNavigationMenus { get; set; }
 
         public WebDbContext(DbContextOptions<WebDbContext> options) : base(options)
@@ -22,13 +22,42 @@ namespace BLTS.WebApi.Infrastructure.Database
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
+            modelBuilder.Entity<Application>(entity =>
+            {
+                entity.ToTable("Application", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("ApplicationId");
+
+                entity.Property(e => e.CreationDate).HasDefaultValueSql("(sysutcdatetime())");
+
+                entity.Property(e => e.Description)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.LastModificationDate).HasDefaultValueSql("(sysutcdatetime())");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.PocEmail).HasMaxLength(255);
+
+                entity.Property(e => e.PocNumber).HasMaxLength(255);
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.Version)
+                    .IsRequired()
+                    .HasMaxLength(255);
+            });
+
             modelBuilder.Entity<ApplicationLog>(entity =>
             {
                 entity.ToTable("ApplicationLog", "Log");
 
                 entity.Property(e => e.Id).HasColumnName("ApplicationLogId");
-
-                entity.HasKey(e => new { e.Id, e.CreationDate });
 
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
@@ -68,11 +97,11 @@ namespace BLTS.WebApi.Infrastructure.Database
 
                 entity.Property(e => e.NotificationDate).HasDefaultValueSql("(CONVERT([datetime2](7),'9999-12-31',(0)))");
 
-                entity.HasOne(d => d.Website)
+                entity.HasOne(d => d.Application)
                     .WithMany(p => p.ApplicationLogCollection)
-                    .HasForeignKey(d => d.WebsiteId)
+                    .HasForeignKey(d => d.ApplicationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SystemStatusLog_Website");
+                    .HasConstraintName("FK_ApplicationLog_Application");
             });
 
             modelBuilder.Entity<FileStorage>(entity =>
@@ -148,13 +177,13 @@ namespace BLTS.WebApi.Infrastructure.Database
                 entity.HasKey(e => new { e.ParentNavigationMenuId, e.ChildNavigationMenuId });
 
                 entity.HasOne(d => d.ChildNavigationMenu)
-                    .WithMany(p => p.NavigationMenuNavigationMenuChildNavigationMenuCollection)
+                    .WithMany(p => p.ChildNavigationMenuCollection)
                     .HasForeignKey(d => d.ChildNavigationMenuId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_NavigationMenuNavigationMenu_NavigationMenu1");
 
                 entity.HasOne(d => d.ParentNavigationMenu)
-                    .WithMany(p => p.NavigationMenuNavigationMenuParentNavigationMenuCollection)
+                    .WithMany(p => p.ParentNavigationMenuCollection)
                     .HasForeignKey(d => d.ParentNavigationMenuId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_NavigationMenuNavigationMenu_NavigationMenu");
@@ -188,11 +217,11 @@ namespace BLTS.WebApi.Infrastructure.Database
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.HasOne(d => d.Website)
+                entity.HasOne(d => d.Application)
                     .WithMany(p => p.OperationalConfigurationCollection)
-                    .HasForeignKey(d => d.WebsiteId)
+                    .HasForeignKey(d => d.ApplicationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OperationalConfiguration_Website");
+                    .HasConstraintName("FK_OperationalConfiguration_Application");
             });
 
             modelBuilder.Entity<WebpageContent>(entity =>
@@ -242,13 +271,15 @@ namespace BLTS.WebApi.Infrastructure.Database
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.Property(e => e.PocEmail).HasMaxLength(255);
-
-                entity.Property(e => e.PocNumber).HasMaxLength(255);
-
                 entity.Property(e => e.Title)
                     .IsRequired()
                     .HasMaxLength(255);
+
+                entity.HasOne(d => d.Application)
+                    .WithMany(p => p.WebsiteCollection)
+                    .HasForeignKey(d => d.ApplicationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Website_Application");
             });
 
             modelBuilder.Entity<WebsiteNavigationMenu>(entity =>

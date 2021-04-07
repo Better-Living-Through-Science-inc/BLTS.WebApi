@@ -8,6 +8,12 @@
     [CreationDate]         DATETIME2 (7)  CONSTRAINT [DF_WebpageContent_CreationDate] DEFAULT (sysutcdatetime()) NOT NULL,
     [LastModificationDate] DATETIME2 (7)  CONSTRAINT [DF_WebpageContent_LastModificationDate] DEFAULT (sysutcdatetime()) NOT NULL,
     [IsDeleted]            BIT            CONSTRAINT [DF_WebpageContent_IsDeleted] DEFAULT ((0)) NOT NULL,
-    CONSTRAINT [PK_WebpageContent] PRIMARY KEY CLUSTERED ([WebpageContentId] ASC)
+    CONSTRAINT [PK_WebpageContent] PRIMARY KEY CLUSTERED ([WebpageContentId] ASC) WITH (FILLFACTOR = 90, ALLOW_PAGE_LOCKS = OFF, PAD_INDEX = ON, DATA_COMPRESSION = ROW)
 );
+
+
+GO
+ALTER TABLE [dbo].[WebpageContent] SET (LOCK_ESCALATION = AUTO);
+
+
 

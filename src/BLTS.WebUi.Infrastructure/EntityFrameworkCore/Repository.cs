@@ -16,15 +16,12 @@ namespace BLTS.WebApi.Infrastructure.Database
         where TEntity : class, IEntity<TPrimaryKey>
         where TDbContext : DbContext
     {
-        protected readonly IUnitOfWork<TDbContext> _unitOfWork;
         protected readonly ReflectionTools _reflectionTools;
         protected readonly TDbContext _context;
         public Repository(IServiceProvider serviceProvider
-                        , IUnitOfWork<TDbContext> unitOfWork
                         , ReflectionTools reflectionTools)
         {
             _context = serviceProvider.GetRequiredService<TDbContext>();
-            _unitOfWork = unitOfWork;
             _reflectionTools = reflectionTools;
         }
 
@@ -34,7 +31,16 @@ namespace BLTS.WebApi.Infrastructure.Database
         /// <returns>The number of state entries written to the database</returns>
         public int UnitOfWorkComplete()
         {
-            return _unitOfWork.Complete();
+            return _context.SaveChanges();
+        }
+
+        /// <summary>
+        /// Saves all changes made in this context to the database.
+        /// </summary>
+        /// <returns>The number of state entries written to the database</returns>
+        public async Task<int> UnitOfWorkCompleteAsync()
+        {
+            return await _context.SaveChangesAsync();
         }
 
         #region Get
@@ -121,7 +127,7 @@ namespace BLTS.WebApi.Infrastructure.Database
             {
                 _context.Set<TEntity>().AddRange(entity);
                 if (autoCommit)
-                    _unitOfWork.Complete();
+                    UnitOfWorkComplete();
             }
             catch
             {
@@ -140,7 +146,7 @@ namespace BLTS.WebApi.Infrastructure.Database
         {
             entity = _context.Set<TEntity>().Add(entity).Entity;
             if (autoCommit)
-                _unitOfWork.Complete();
+                UnitOfWorkComplete();
 
             return entity;
         }
@@ -156,7 +162,7 @@ namespace BLTS.WebApi.Infrastructure.Database
                           && Insert(entity.Where(singleEntity => singleEntity.Id.Equals(default(TPrimaryKey))).ToList());
             if (autoCommit)
                 if (isSuccess)
-                    _unitOfWork.Complete();
+                    UnitOfWorkComplete();
 
             return isSuccess;
         }
@@ -185,7 +191,7 @@ namespace BLTS.WebApi.Infrastructure.Database
             {
                 _context.Set<TEntity>().UpdateRange(entity);
                 if (autoCommit)
-                    _unitOfWork.Complete();
+                    UnitOfWorkComplete();
             }
             catch
             {
@@ -204,7 +210,7 @@ namespace BLTS.WebApi.Infrastructure.Database
         {
             entity = _context.Set<TEntity>().Update(entity).Entity;
             if (autoCommit)
-                _unitOfWork.Complete();
+                UnitOfWorkComplete();
 
             return entity;
         }
@@ -222,7 +228,7 @@ namespace BLTS.WebApi.Infrastructure.Database
             {
                 _context.Set<TEntity>().RemoveRange(entity);
                 if (autoCommit)
-                    _unitOfWork.Complete();
+                    UnitOfWorkComplete();
             }
             catch
             {
@@ -243,7 +249,7 @@ namespace BLTS.WebApi.Infrastructure.Database
             {
                 entity = _context.Set<TEntity>().Remove(entity).Entity;
                 if (autoCommit)
-                    _unitOfWork.Complete();
+                    UnitOfWorkComplete();
             }
             catch
             {

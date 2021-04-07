@@ -12,7 +12,7 @@ namespace BLTS.WebApi.Models
             NotificationDate = DateTime.Parse("9999-12-31");
         }
 
-        public long WebsiteId { get; set; }
+        public long ApplicationId { get; set; }
         public string ApplicationName { get; set; }
         public string EnvironmentName { get; set; }
         public string ClassName { get; set; }
@@ -24,6 +24,6 @@ namespace BLTS.WebApi.Models
         public bool IsException { get; set; }
         public DateTime NotificationDate { get; set; }
 
-        public virtual Website Website { get; set; }
+        public virtual Application Application { get; set; }
     }
 }

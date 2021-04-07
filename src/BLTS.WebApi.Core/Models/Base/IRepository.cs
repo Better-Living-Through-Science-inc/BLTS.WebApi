@@ -13,8 +13,13 @@ namespace BLTS.WebApi.Models
         /// Saves all changes made in this context to the database.
         /// </summary>
         /// <returns>The number of state entries written to the database</returns>
-        public int UnitOfWorkComplete();
-        
+        int UnitOfWorkComplete();
+        /// <summary>
+        /// Saves all changes made in this context to the database.
+        /// </summary>
+        /// <returns>The number of state entries written to the database</returns>
+        Task<int> UnitOfWorkCompleteAsync();
+
         #region Get
         /// <summary>
         /// returns unordered list of all entities that match the expression

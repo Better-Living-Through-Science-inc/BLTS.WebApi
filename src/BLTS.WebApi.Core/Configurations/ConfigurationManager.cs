@@ -17,13 +17,18 @@ namespace BLTS.WebApi.Configurations
     public class ConfigurationManager
     {
         private IConfiguration _configuration;
+        private IRepository<Application, long> _repositoryApplication;
         private IRepository<OperationalConfiguration, long> _repositoryOperationalConfiguration;
+        private long _currentApplicationId;
 
         public ConfigurationManager(IConfiguration configuration
+                                  , IRepository<Application, long> repositoryApplication
                                   , IRepository<OperationalConfiguration, long> repositoryOperationalConfiguration)
         {
             _configuration = configuration;
             _repositoryOperationalConfiguration = repositoryOperationalConfiguration;
+            _repositoryApplication = repositoryApplication;
+            _currentApplicationId = long.Parse(_configuration.GetSection("App")["ApplicationId"].ToString());
             // preload the config data on startup
             VerifyConfigDataLoaded();
         }
@@ -32,7 +37,7 @@ namespace BLTS.WebApi.Configurations
         /// cache access method
         /// </summary>
         /// <returns></returns>
-        private ConcurrentDictionary<string, dynamic> VerifyConfigDataLoaded()
+        private ConcurrentDictionary<long, ConcurrentDictionary<string, dynamic>> VerifyConfigDataLoaded()
         {
             MemoryCache memoryCache = MemoryCache.Default;
 
@@ -44,57 +49,75 @@ namespace BLTS.WebApi.Configurations
         /// <summary>
         /// Load config from DB replacementknownPropertiesDictionary knownProperties
         /// </summary>
-        /// <returns></returns>
-        private ConcurrentDictionary<string, dynamic> GenerateCurrentConfigSettings()
+        /// <returns>Dictionary in the form of AppId, Config Property, Config Value</returns>
+        private ConcurrentDictionary<long, ConcurrentDictionary<string, dynamic>> GenerateCurrentConfigSettings()
         {
-
-            ConcurrentDictionary<string, dynamic> applicationVariableDictionary = new ConcurrentDictionary<string, dynamic>();
+            ConcurrentDictionary<long, ConcurrentDictionary<string, dynamic>> applicationVariableDictionary = new ConcurrentDictionary<long, ConcurrentDictionary<string, dynamic>>();
 
             #region begin extract of primary app vars from config files
+            //add current app id to the dictionary
+            applicationVariableDictionary.TryAdd(_currentApplicationId, new ConcurrentDictionary<string, dynamic>());
             _configuration.AsEnumerable().AsParallel()
                           .Where(singleConfigurationValue => singleConfigurationValue.Key.Contains("ConnectionStrings", StringComparison.InvariantCultureIgnoreCase) == false
                                                           && !string.IsNullOrWhiteSpace(singleConfigurationValue.Value))
-                          .ForAll(singleConfigurationValue => applicationVariableDictionary.TryAdd(singleConfigurationValue.Key.Replace("Values:", "").Replace("App:", ""), singleConfigurationValue.Value));
+                          .ForAll(singleConfigurationValue => applicationVariableDictionary[_currentApplicationId].TryAdd(singleConfigurationValue.Key.Replace("Values:", "").Replace("App:", ""), singleConfigurationValue.Value));
             #endregion
 
             #region begin extract of connection strings in the config data
-            applicationVariableDictionary.TryAdd("ConnectionStrings", new ConcurrentDictionary<string, string>());
+            applicationVariableDictionary[_currentApplicationId].TryAdd("ConnectionStrings", new ConcurrentDictionary<string, string>());
             _configuration.AsEnumerable().AsParallel()
                           .Where(singleConfigurationValue => singleConfigurationValue.Key.Contains("ConnectionStrings:", StringComparison.InvariantCultureIgnoreCase) == true
                                                           && !string.IsNullOrWhiteSpace(singleConfigurationValue.Value))
-                          .ForAll(singleConfigurationValue => applicationVariableDictionary["ConnectionStrings"].TryAdd(singleConfigurationValue.Key.Replace("ConnectionStrings:", ""), singleConfigurationValue.Value));
+                          .ForAll(singleConfigurationValue => applicationVariableDictionary[_currentApplicationId]["ConnectionStrings"].TryAdd(singleConfigurationValue.Key.Replace("ConnectionStrings:", ""), singleConfigurationValue.Value));
             #endregion
 
             #region load config data from DB storage
 
+            //load application values
+            List<Application> applicationCollection = _repositoryApplication.GetAll().ItemCollection;
+
+            applicationCollection.AsParallel()
+                                 .ForAll(singleAppValue =>
+                                 {
+                                     applicationVariableDictionary.TryAdd(singleAppValue.Id, new ConcurrentDictionary<string, dynamic>());
+                                     applicationVariableDictionary[singleAppValue.Id].TryAdd("ApplicationName", singleAppValue.Name);
+                                     applicationVariableDictionary[singleAppValue.Id].TryAdd("ApplicationVersion", singleAppValue.Version);
+                                     applicationVariableDictionary[singleAppValue.Id].TryAdd("ApplicationTitle", singleAppValue.Title);
+                                     applicationVariableDictionary[singleAppValue.Id].TryAdd("ApplicationDescription", singleAppValue.Description);
+                                     applicationVariableDictionary[singleAppValue.Id].TryAdd("ApplicationPocEmail", singleAppValue.PocEmail);
+                                     applicationVariableDictionary[singleAppValue.Id].TryAdd("ApplicationPocNumber", singleAppValue.PocNumber);
+                                 });
+
+
+            //load configuration values
             List<OperationalConfiguration> configurationColletion = _repositoryOperationalConfiguration.GetAll().ItemCollection;
 
             configurationColletion.AsParallel()
                                   .Where(singleConfigurationValue => singleConfigurationValue.IsConnectionString == false)
-                                  .ForAll(singleConfigurationValue => applicationVariableDictionary.TryAdd(singleConfigurationValue.PropertyName,
-                                                                                            (singleConfigurationValue.IntegerValue.HasValue) ? singleConfigurationValue.IntegerValue :
-                                                                                            (singleConfigurationValue.StringValue != null) ? singleConfigurationValue.StringValue :
-                                                                                            (singleConfigurationValue.BoolValue.HasValue) ? singleConfigurationValue.BoolValue :
-                                                                                            (singleConfigurationValue.DateValue.HasValue) ? singleConfigurationValue.DateValue :
-                                                                                            (singleConfigurationValue.LongValue.HasValue) ? singleConfigurationValue.LongValue :
-                                                                                            (singleConfigurationValue.DecimalValue.HasValue) ? singleConfigurationValue.DecimalValue :
-                                                                                            (singleConfigurationValue.GuidValue.HasValue) ? singleConfigurationValue.GuidValue : (dynamic)"No Value Assigned"
-                                                                                            ));
+                                  .ForAll(singleConfigurationValue => applicationVariableDictionary[singleConfigurationValue.ApplicationId].TryAdd(singleConfigurationValue.PropertyName,
+                                                                                                                                                  (singleConfigurationValue.IntegerValue.HasValue) ? singleConfigurationValue.IntegerValue :
+                                                                                                                                                  (singleConfigurationValue.StringValue != null) ? singleConfigurationValue.StringValue :
+                                                                                                                                                  (singleConfigurationValue.BoolValue.HasValue) ? singleConfigurationValue.BoolValue :
+                                                                                                                                                  (singleConfigurationValue.DateValue.HasValue) ? singleConfigurationValue.DateValue :
+                                                                                                                                                  (singleConfigurationValue.LongValue.HasValue) ? singleConfigurationValue.LongValue :
+                                                                                                                                                  (singleConfigurationValue.DecimalValue.HasValue) ? singleConfigurationValue.DecimalValue :
+                                                                                                                                                  (singleConfigurationValue.GuidValue.HasValue) ? singleConfigurationValue.GuidValue : (dynamic)"No Value Assigned"
+                                                                                                                                                  ));
 
 
             configurationColletion.AsParallel()
                                   .Where(singleConfigurationValue => singleConfigurationValue.IsConnectionString == true)
-                                  .ForAll(singleConfigurationValue => applicationVariableDictionary["ConnectionStrings"].TryAdd(singleConfigurationValue.PropertyName, singleConfigurationValue.StringValue));
+                                  .ForAll(singleConfigurationValue => applicationVariableDictionary[singleConfigurationValue.ApplicationId]["ConnectionStrings"].TryAdd(singleConfigurationValue.PropertyName, singleConfigurationValue.StringValue));
 
             configurationColletion = null;
             #endregion
 
             #region assign config data from application and environment data
-            applicationVariableDictionary.TryAdd("ProcessorCount", Environment.ProcessorCount);
-            applicationVariableDictionary.TryAdd("EnvironmentName", Environment.MachineName);
-            applicationVariableDictionary.TryAdd("EnvironmentType", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
+            applicationVariableDictionary[_currentApplicationId].TryAdd("ProcessorCount", Environment.ProcessorCount);
+            applicationVariableDictionary[_currentApplicationId].TryAdd("EnvironmentName", Environment.MachineName);
+            applicationVariableDictionary[_currentApplicationId].TryAdd("EnvironmentType", Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
 
-            if (!applicationVariableDictionary.ContainsKey("ApplicationName"))
+            if (!applicationVariableDictionary[_currentApplicationId].ContainsKey("ApplicationName"))
             {
                 string applicationName = Environment.GetEnvironmentVariable("ApplicationName");
 
@@ -104,21 +127,31 @@ namespace BLTS.WebApi.Configurations
                 if (string.IsNullOrWhiteSpace(applicationName))
                     applicationName = "ApplicationNameUnknown";
 
-                applicationVariableDictionary.TryAdd("ApplicationName", applicationName);
+                applicationVariableDictionary[_currentApplicationId].TryAdd("ApplicationName", applicationName);
             }
-            applicationVariableDictionary.AddOrUpdate("ApplicationNameInErrorLog", applicationVariableDictionary["ApplicationName"], (Func<string, dynamic, dynamic>)((key, existingValue) => applicationVariableDictionary["ApplicationName"]));
+            applicationVariableDictionary[_currentApplicationId].AddOrUpdate("ApplicationNameInErrorLog", applicationVariableDictionary[_currentApplicationId]["ApplicationName"], (Func<string, dynamic, dynamic>)((key, existingValue) => applicationVariableDictionary[_currentApplicationId]["ApplicationName"]));
             #endregion
 
             return applicationVariableDictionary;
         }
 
         /// <summary>
-        /// returns the full config dictionary
+        /// returns the app id of the current instance of the app
         /// </summary>
         /// <returns></returns>
-        public ConcurrentDictionary<string, dynamic> GetAll()
+        public long GetCurrentApplicationId()
         {
-            return VerifyConfigDataLoaded();
+            return _currentApplicationId;
+        }
+
+        /// <summary>
+        /// returns the full config dictionary
+        /// </summary>
+        /// <returns>Dictionary in the form of Config Property, Config Value</returns>
+        public ConcurrentDictionary<string, dynamic> GetAll(long? applicationId = null)
+        {
+            applicationId ??= _currentApplicationId;
+            return VerifyConfigDataLoaded()[applicationId.Value];
         }
 
         /// <summary>
@@ -126,12 +159,14 @@ namespace BLTS.WebApi.Configurations
         /// </summary>
         /// <param name="requestedConfigurationName"></param>
         /// <returns></returns>
-        public dynamic GetValue(string requestedConfigurationName)
+        public dynamic GetValue(string requestedConfigurationName, long? applicationId = null)
         {
             dynamic currentReturnObject = null;
 
-            if (VerifyConfigDataLoaded().ContainsKey(requestedConfigurationName))
-                currentReturnObject = VerifyConfigDataLoaded()[requestedConfigurationName];
+            applicationId ??= _currentApplicationId;
+
+            if (VerifyConfigDataLoaded()[applicationId.Value].ContainsKey(requestedConfigurationName))
+                currentReturnObject = VerifyConfigDataLoaded()[applicationId.Value][requestedConfigurationName];
 
             return currentReturnObject;
         }
@@ -141,11 +176,12 @@ namespace BLTS.WebApi.Configurations
         /// </summary>
         /// <param name="requestedConfigurationName"></param>
         /// <returns></returns>
-        public string GetConnectionString(string requestedConnectionStringName)
+        public string GetConnectionString(string requestedConnectionStringName, long? applicationId = null)
         {
             string currentReturnObject = null;
-            if (VerifyConfigDataLoaded()["ConnectionStrings"].ContainsKey(requestedConnectionStringName))
-                currentReturnObject = (string)VerifyConfigDataLoaded()["ConnectionStrings"][requestedConnectionStringName];
+            applicationId ??= _currentApplicationId;
+            if (VerifyConfigDataLoaded()[applicationId.Value]["ConnectionStrings"].ContainsKey(requestedConnectionStringName))
+                currentReturnObject = (string)VerifyConfigDataLoaded()[applicationId.Value]["ConnectionStrings"][requestedConnectionStringName];
 
             return currentReturnObject;
         }
@@ -155,9 +191,10 @@ namespace BLTS.WebApi.Configurations
         /// </summary>
         /// <param name="requestedConfigurationName"></param>
         /// <param name="newAssignmentValue"></param>
-        public void SetValue(string requestedConfigurationName, dynamic newAssignmentValue, bool isUpdateDatabase = false)
+        public void SetValue(string requestedConfigurationName, dynamic newAssignmentValue, bool isUpdateDatabase = false, long? applicationId = null)
         {
-            VerifyConfigDataLoaded().AddOrUpdate(requestedConfigurationName, newAssignmentValue, (Func<string, dynamic, dynamic>)((key, existingValue) => newAssignmentValue));
+            applicationId ??= _currentApplicationId;
+            VerifyConfigDataLoaded()[applicationId.Value].AddOrUpdate(requestedConfigurationName, newAssignmentValue, (Func<string, dynamic, dynamic>)((key, existingValue) => newAssignmentValue));
 
             if (isUpdateDatabase == true)
             {
@@ -186,9 +223,10 @@ namespace BLTS.WebApi.Configurations
         /// </summary>
         /// <param name="requestedConfigurationName"></param>
         /// <param name="valueFactory"></param>
-        public dynamic SetValue<T>(string requestedConfigurationName, Func<T> valueFactory, bool isUpdateDatabase = false)
+        public dynamic SetValue<T>(string requestedConfigurationName, Func<T> valueFactory, bool isUpdateDatabase = false, long? applicationId = null)
         {
-            VerifyConfigDataLoaded().AddOrUpdate(requestedConfigurationName, valueFactory.Invoke(), (Func<string, dynamic, dynamic>)((key, existingValue) => valueFactory.Invoke()));
+            applicationId ??= _currentApplicationId;
+            VerifyConfigDataLoaded()[applicationId.Value].AddOrUpdate(requestedConfigurationName, valueFactory.Invoke(), (Func<string, dynamic, dynamic>)((key, existingValue) => valueFactory.Invoke()));
 
             if (isUpdateDatabase == true)
             {
@@ -211,7 +249,7 @@ namespace BLTS.WebApi.Configurations
 
             }
 
-            return VerifyConfigDataLoaded()[requestedConfigurationName];
+            return VerifyConfigDataLoaded()[applicationId.Value][requestedConfigurationName];
         }
 
         /// <summary>
@@ -222,10 +260,11 @@ namespace BLTS.WebApi.Configurations
         /// <param name="valueFactory"></param>
         /// <param name="isUpdateDatabase"></param>
         /// <returns></returns>
-        public dynamic SetOrGetValue<T>(string requestedConfigurationName, Func<T> valueFactory, bool isUpdateDatabase = false)
+        public dynamic SetOrGetValue<T>(string requestedConfigurationName, Func<T> valueFactory, bool isUpdateDatabase = false, long? applicationId = null)
         {
-            if (VerifyConfigDataLoaded().ContainsKey(requestedConfigurationName))
-                return VerifyConfigDataLoaded()[requestedConfigurationName];
+            applicationId ??= _currentApplicationId;
+            if (VerifyConfigDataLoaded()[applicationId.Value].ContainsKey(requestedConfigurationName))
+                return VerifyConfigDataLoaded()[applicationId.Value][requestedConfigurationName];
             else
                 return SetValue<T>(requestedConfigurationName, valueFactory, isUpdateDatabase);
         }
@@ -235,9 +274,10 @@ namespace BLTS.WebApi.Configurations
         /// </summary>
         /// <param name="requestedConfigurationName"></param>
         /// <param name="newAssignmentValue"></param>
-        public void SetConnectionString(string requestedConfigurationName, string newAssignmentValue, bool isUpdateDatabase = false)
+        public void SetConnectionString(string requestedConfigurationName, string newAssignmentValue, bool isUpdateDatabase = false, long? applicationId = null)
         {
-            VerifyConfigDataLoaded()["ConnectionStrings"].AddOrUpdate(requestedConfigurationName, newAssignmentValue, (Func<string, dynamic, dynamic>)((key, existingValue) => newAssignmentValue));
+            applicationId ??= _currentApplicationId;
+            VerifyConfigDataLoaded()[applicationId.Value]["ConnectionStrings"].AddOrUpdate(requestedConfigurationName, newAssignmentValue, (Func<string, dynamic, dynamic>)((key, existingValue) => newAssignmentValue));
             if (isUpdateDatabase == true)
             {
                 OperationalConfiguration currentWorkingObject = _repositoryOperationalConfiguration.GetAll().ItemCollection.Where(singleConfig => singleConfig.PropertyName == requestedConfigurationName).FirstOrDefault();
@@ -263,10 +303,11 @@ namespace BLTS.WebApi.Configurations
         /// </summary>
         /// <param name="requestedConfigurationName"></param>
         /// <returns></returns>
-        public void DeleteValue(string requestedConfigurationName, bool isUpdateDatabase = false)
+        public void DeleteValue(string requestedConfigurationName, bool isUpdateDatabase = false, long? applicationId = null)
         {
-            if (VerifyConfigDataLoaded().ContainsKey(requestedConfigurationName))
-                VerifyConfigDataLoaded().TryRemove(requestedConfigurationName, out _);
+            applicationId ??= _currentApplicationId;
+            if (VerifyConfigDataLoaded()[applicationId.Value].ContainsKey(requestedConfigurationName))
+                VerifyConfigDataLoaded()[applicationId.Value].TryRemove(requestedConfigurationName, out _);
 
             if (isUpdateDatabase == true)
             {
