@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using BLTS.WebApi.DtoModels;
+using BLTS.WebApi.Models;
 
 namespace BLTS.WebApi.Web.Core
 {
@@ -6,21 +8,12 @@ namespace BLTS.WebApi.Web.Core
     {
         public AutoMapperProfile()
         {
-            //CreateMap<Barge, CreateUpdateBargeDto>();
-            //CreateMap<BargeType, CreateUpdateBargeTypeDto>();
-            //CreateMap<FreightLotDraft, CreateUpdateFreightLotDraftDto>();
-            //CreateMap<Shipment, CreateUpdateShipmentDto>();
-            //CreateMap<ShipmentBarge, CreateUpdateShipmentBargeDto>();
-            //CreateMap<UltrasonicMeasurment, CreateUpdateUltrasonicMeasurmentDto>();
-            //CreateMap<Weather, CreateUpdateWeatherDto>();
-
-            //CreateMap<BargeDto, Barge>();
-            //CreateMap<BargeTypeDto, BargeType>();
-            //CreateMap<FreightLotDraftDto, FreightLotDraft>();
-            //CreateMap<ShipmentDto, Shipment>();
-            //CreateMap<ShipmentBargeDto, ShipmentBarge>();
-            //CreateMap<UltrasonicMeasurmentDto, UltrasonicMeasurment>();
-            //CreateMap<WeatherDto, Weather>();
+            CreateMap<IPagedResultRequestEntity<Website>, PagedResultRequestDtoEntity<WebsiteDtoEntity>>();
+            CreateMap<PagedResultRequestDtoEntity<WebsiteDtoEntity>, IPagedResultRequestEntity<Website>>();
+            CreateMap<IPagedResultEntity<Website>, PagedResultDtoEntity<WebsiteDtoEntity>>();
+            CreateMap<PagedResultDtoEntity<WebsiteDtoEntity>, IPagedResultEntity<Website>>();
+            CreateMap<Website, WebsiteDtoEntity>();
+            CreateMap<WebsiteDtoEntity, Website>();
         }
     }
 }

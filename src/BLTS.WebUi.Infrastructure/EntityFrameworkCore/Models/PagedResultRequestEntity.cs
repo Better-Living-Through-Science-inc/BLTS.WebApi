@@ -2,15 +2,15 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace BLTS.WebApi.DtoModels
+namespace BLTS.WebApi.Infrastructure.Database
 {
-    public class PagedResultRequestDtoEntity<TEntity> : IPagedResultRequestEntity<TEntity>
+    public class PagedResultRequestEntity<TEntity> : IPagedResultRequestEntity<TEntity>
     {
-        public PagedResultRequestDtoEntity()
+        public PagedResultRequestEntity()
         {
-            MaxResultCount = 99;
+            MaxResultCount = 100;
             SkipCount = 0;
-            SortRequest = "Id desc";
+            SortRequest = "Id Desc";
         }
 
         /// <summary>

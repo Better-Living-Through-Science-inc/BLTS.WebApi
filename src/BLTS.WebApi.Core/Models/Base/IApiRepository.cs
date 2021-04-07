@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BLTS.WebApi.InfrastructureInterfaces
+namespace BLTS.WebApi.Models
 {
     public interface IApiRepository<TEntity, TEntityDto, TEntityCreateUpdateDto, TPrimaryKey> where TEntity : new()
     {

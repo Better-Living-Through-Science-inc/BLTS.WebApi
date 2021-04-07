@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BLTS.WebApi.DtoModels;
+using Microsoft.AspNetCore.Mvc;
 
-namespace BLTS.WebApi.Configurations.Dto
+namespace BLTS.WebApi.Configurations
 {
     //[Produces("application/json")]
-    //[Route("api/[controller]")]
+    //[Route("api/[controller]/[action]")]
     //[ApiController]
-    //public class ConfigurationAppService : ControllerBase
+    //public class ConfigurationController : ControllerBase, IApiEndpoint
     //{
     //    private ConfigurationManager _configurationManager;
 
-    //    public ConfigurationAppService(ConfigurationManager configurationManager)
+    //    public ConfigurationController(ConfigurationManager configurationManager)
     //    {
     //        _configurationManager = configurationManager;
     //    }
@@ -19,7 +20,8 @@ namespace BLTS.WebApi.Configurations.Dto
     //    /// </summary>
     //    /// <param name="input"></param>
     //    /// <returns></returns>
-    //    public dynamic GetValue(OperationalConfigurationDto input)
+    //    [HttpGet]
+    //    public dynamic Get(OperationalConfigurationDto input)
     //    {
     //        return _configurationManager.GetValue(input.PropertyName);
     //    }
@@ -29,7 +31,8 @@ namespace BLTS.WebApi.Configurations.Dto
     //    /// </summary>
     //    /// <param name="input"></param>
     //    /// <returns></returns>
-    //    public void SetValue(OperationalConfigurationCreateDto input)
+    //    [HttpPost]
+    //    public void Save(OperationalConfigurationCreateDto input)
     //    {
     //        _configurationManager.SetValue(input.PropertyName, input.PropertyValue, input.IsUpdateDatabase);
     //    }

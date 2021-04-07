@@ -6,24 +6,25 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
 
 namespace BLTS.WebApi.Utilities
 {
-    public static class ReflectionTools
+    public class ReflectionTools
     {
         /// <summary>
-        /// converts object of type object into object of type T using CultureInfo("en-US")
+        /// converts object of type object into object of type TEntity using CultureInfo("en-US")
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="objectValue"></param>
         /// <returns></returns>
-        public static T ConvertObjectToType<T>(dynamic objectValue)
+        public TEntity ConvertObjectToType<TEntity>(dynamic objectValue)
         {
-            object returnObject = ConvertObjectToType(objectValue, typeof(T), new CultureInfo("en-US"));
+            object returnObject = ConvertObjectToType(objectValue, typeof(TEntity), new CultureInfo("en-US"));
             if (returnObject != null)
-                return (T)returnObject;
+                return (TEntity)returnObject;
             else
-                return default(T);
+                return default(TEntity);
         }
 
         /// <summary>
@@ -33,7 +34,7 @@ namespace BLTS.WebApi.Utilities
         /// <param name="conversionObjectType"></param>
         /// <param name="culture"></param>
         /// <returns></returns>
-        public static dynamic ConvertObjectToType(dynamic objectValue, Type conversionObjectType, CultureInfo culture)
+        public dynamic ConvertObjectToType(dynamic objectValue, Type conversionObjectType, CultureInfo culture)
         {
             switch (Type.GetTypeCode(conversionObjectType))
             {
@@ -109,9 +110,9 @@ namespace BLTS.WebApi.Utilities
             return objectValue;
         }
 
-        public static ConcurrentBag<T> ConvertBagToType<T>(T sampleForTValue, ConcurrentBag<dynamic> collectionToConvert)
+        public ConcurrentBag<TEntity> ConvertBagToType<TEntity>(TEntity sampleForTValue, ConcurrentBag<dynamic> collectionToConvert)
         {
-            return new ConcurrentBag<T>(collectionToConvert.Cast<T>());
+            return new ConcurrentBag<TEntity>(collectionToConvert.Cast<TEntity>());
         }
 
         /// <summary>
@@ -119,7 +120,7 @@ namespace BLTS.WebApi.Utilities
         /// </summary>
         /// <param name="byteArrayToConvert"></param>
         /// <returns></returns>
-        public static dynamic ByteArrayToObject(byte[] byteArrayToConvert)
+        public dynamic ByteArrayToObject(byte[] byteArrayToConvert)
         {
             dynamic returnObject;
 
@@ -142,7 +143,7 @@ namespace BLTS.WebApi.Utilities
         /// </summary>
         /// <param name="objectToConvert"></param>
         /// <returns></returns>
-        public static byte[] ObjectToByteArray(dynamic objectToConvert)
+        public byte[] ObjectToByteArray(dynamic objectToConvert)
         {
             byte[] returnByteArray;
 
@@ -163,6 +164,65 @@ namespace BLTS.WebApi.Utilities
             return returnByteArray;
         }
 
+        /// <summary>
+        /// returns a collection of properties that have values assigned with the value,
+        ///  It makes a nice dictionary of what is interesting in an object
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="queryObject"></param>
+        /// <param name="ignorePkValues"></param>
+        /// <param name="ignoreNullValues"></param>
+        /// <param name="ignoreDefaultValues"></param>
+        /// <returns></returns>
+        public ConcurrentDictionary<PropertyInfo, dynamic> ValidPropertiesForSearch<TEntity>(TEntity queryObject, bool ignorePkValues = false, bool ignoreNullValues = true, bool ignoreDefaultValues = true)
+        {
+            PropertyInfo[] queryObjectProperties = typeof(TEntity).GetProperties();
+            ConcurrentDictionary<PropertyInfo, dynamic> validCollectionOfProperties = new ConcurrentDictionary<PropertyInfo, dynamic>();
+
+            Parallel.ForEach(queryObjectProperties, singleObjectProperty =>
+            {
+                bool isIgnorePropertyByRule = false;
+                dynamic singleObjectPropertyValue = singleObjectProperty.GetValue(queryObject, null);
+
+                //process this as a normal property and not a POCO object
+                if (singleObjectProperty.PropertyType.Namespace.Contains("System") || singleObjectProperty.PropertyType.Namespace.Contains("Microsoft"))
+                {
+                    //excludes collections from the check
+                    if (!isIgnorePropertyByRule && singleObjectProperty.PropertyType.Namespace.Contains("System.Collections") || singleObjectProperty.PropertyType.BaseType.FullName.Contains("System.Array"))
+                        isIgnorePropertyByRule = true;
+
+                    //excludes the IsPocoCacheObject from the check
+                    if (!isIgnorePropertyByRule && singleObjectProperty.Name == "IsPocoCacheObject")
+                        isIgnorePropertyByRule = true;
+
+                    //if we ignore PK values and this is a PK value... do not process
+                    if (!isIgnorePropertyByRule && ignorePkValues == true)
+                        if (singleObjectProperty.Name.ToLower() == queryObject.GetType().Name.ToLower() + "id")
+                            isIgnorePropertyByRule = true;
+
+                    //if we ignore PK values and this is a PK value... do not process
+                    if (!isIgnorePropertyByRule && ignorePkValues == true)
+                        if (singleObjectProperty.Name.ToLower() == "id")
+                            isIgnorePropertyByRule = true;
+
+                    //if the property value is null and we are ignoring nulls - ignore
+                    if (!isIgnorePropertyByRule && ignoreNullValues == true)
+                        if (singleObjectPropertyValue == null)
+                            isIgnorePropertyByRule = true;
+
+                    //if the property value is default and we are ignoring default values - ignore
+                    if (!isIgnorePropertyByRule && ignoreDefaultValues == true)
+                        if (singleObjectPropertyValue.Equals(Create(singleObjectProperty.PropertyType)))
+                            isIgnorePropertyByRule = true;
+                }
+
+                if (!isIgnorePropertyByRule)
+                    validCollectionOfProperties.TryAdd(singleObjectProperty, singleObjectPropertyValue);
+            });
+
+            return validCollectionOfProperties;
+        }
+
         #region Object Factory to instantiate null objects, create copies and other neat things
 
         /// <summary>
@@ -171,7 +231,7 @@ namespace BLTS.WebApi.Utilities
         /// </summary>
         /// <param name="typeName"></param>
         /// <returns></returns>
-        public static dynamic Create(string typeAssemblyQualifiedName)
+        public dynamic Create(string typeAssemblyQualifiedName)
         {
             // resolve the type
             Type targetType = ResolveType(typeAssemblyQualifiedName);
@@ -186,9 +246,9 @@ namespace BLTS.WebApi.Utilities
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static dynamic Create<T>() where T : new()
+        public dynamic Create<TEntity>() where TEntity : new()
         {
-            return new T();
+            return new TEntity();
         }
 
         /// <summary>
@@ -196,9 +256,13 @@ namespace BLTS.WebApi.Utilities
         /// </summary>
         /// <param name="targetType"></param>
         /// <returns></returns>
-        public static dynamic Create(Type targetType)
+        public dynamic Create(Type targetType)
         {
-            return Activator.CreateInstance(targetType);
+            if (targetType == typeof(string))
+                return default(string);
+            else
+                return Activator.CreateInstance(targetType);
+
 
             // get the default constructor and instantiate
             //Type[] types = new Type[0];
@@ -223,9 +287,9 @@ namespace BLTS.WebApi.Utilities
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static ConcurrentBag<T> CreateBag<T>()
+        public ConcurrentBag<TEntity> CreateBag<TEntity>()
         {
-            return new ConcurrentBag<T>();
+            return new ConcurrentBag<TEntity>();
         }
 
         /// <summary>
@@ -234,15 +298,15 @@ namespace BLTS.WebApi.Utilities
         /// <typeparam name="T"></typeparam>
         /// <param name="targetTypeSample"></param>
         /// <returns></returns>
-        public static ConcurrentBag<T> CreateBag<T>(T targetTypeSample)
+        public ConcurrentBag<TEntity> CreateBag<TEntity>(TEntity targetTypeSample)
         {
-            return new ConcurrentBag<T>();
+            return new ConcurrentBag<TEntity>();
             //Type currentOutputType = typeof(ConcurrentBag<>);
-            //Type[] collectionType = { typeof(T) };
+            //Type[] collectionType = { typeof(TEntity) };
 
             //Type outputBagType = currentOutputType.MakeGenericType(collectionType);
 
-            //return (ConcurrentBag<T>)Activator.CreateInstance(outputBagType);
+            //return (ConcurrentBag<TEntity>)Activator.CreateInstance(outputBagType);
         }
 
         /// <summary>
@@ -251,7 +315,7 @@ namespace BLTS.WebApi.Utilities
         /// <param name="targetTypeKey"></param>
         /// <param name="targetTypeValue"></param>
         /// <returns></returns>
-        public static dynamic CreateDictionary(Type targetTypeKey, Type targetTypeValue)
+        public dynamic CreateDictionary(Type targetTypeKey, Type targetTypeValue)
         {
             Type currentOutputType = typeof(ConcurrentDictionary<,>);
             Type[] dictionaryType = { targetTypeKey, targetTypeValue };
@@ -267,7 +331,7 @@ namespace BLTS.WebApi.Utilities
         /// </summary>
         /// <param name="typeString"></param>
         /// <returns></returns>
-        public static Type ResolveType(string typeAssemblyQualifiedName)
+        public Type ResolveType(string typeAssemblyQualifiedName)
         {
             int commaIndex = typeAssemblyQualifiedName.IndexOf(",");
             string className = typeAssemblyQualifiedName.Substring(0, commaIndex).Trim();
@@ -285,7 +349,7 @@ namespace BLTS.WebApi.Utilities
         /// <param name="className"></param>
         /// <param name="assemblyName"></param>
         /// <returns></returns>
-        public static Type ResolveType(string className, string assemblyName)
+        public Type ResolveType(string className, string assemblyName)
         {
             // Get the assembly containing the handler
             Assembly assembly = Assembly.GetExecutingAssembly();
@@ -313,14 +377,13 @@ namespace BLTS.WebApi.Utilities
             return assembly.GetType(className, false, false);
         }
 
-
         /// <summary>
         /// object duplication method
         /// </summary>
         /// <param name="sourceObject"></param>
-        public static T CreateCopy<T>(T sourceObject)
+        public TEntity CreateCopy<TEntity>(TEntity sourceObject)
         {
-            T targetObject = (T)Create(sourceObject.GetType());
+            TEntity targetObject = (TEntity)Create(sourceObject.GetType());
             return targetObject;
         }
 
@@ -333,7 +396,7 @@ namespace BLTS.WebApi.Utilities
         /// <param name="methodName"></param>
         /// <param name="methodParameters"></param>
         /// <returns></returns>
-        public static object ExecuteMethod(string assemblyName, string className, object[] classConstructorParameters, string methodName, object[] methodParameters)
+        public object ExecuteMethod(string assemblyName, string className, object[] classConstructorParameters, string methodName, object[] methodParameters)
         {
             try
             {

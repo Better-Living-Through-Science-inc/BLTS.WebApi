@@ -1,20 +1,23 @@
-﻿using BLTS.WebApi.InfrastructureInterfaces;
+﻿using BLTS.WebApi.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace BLTS.WebApi.Infrastructure.Database
 {
-    public sealed class UnitOfWork : IUnitOfWork
+    public sealed class UnitOfWork<TDbContext> : IUnitOfWork<TDbContext>
+        where TDbContext : DbContext
     {
-        private readonly WebDbContext _context;
-        public UnitOfWork(IServiceScopeFactory serviceScopeFactory)
+        private readonly TDbContext _context;
+        public UnitOfWork(IServiceProvider serviceProvider)
         {
-            _context = serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<WebDbContext>();
+            _context = serviceProvider.GetRequiredService<TDbContext>();
         }
 
         /// <summary>
         /// Saves all changes made in this context to the database.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The number of state entries written to the database</returns>
         public int Complete()
         {
             return _context.SaveChanges();

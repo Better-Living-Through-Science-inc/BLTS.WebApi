@@ -1,15 +1,15 @@
 ﻿using BLTS.WebApi.Models;
 using System.Collections.Generic;
 
-namespace BLTS.WebApi.DtoModels
+namespace BLTS.WebApi.Infrastructure.Database
 {
-    public class PagedResultDtoEntity<TEntity> : IPagedResultEntity<TEntity>
+    public class PagedResultEntity<TEntity> : IPagedResultEntity<TEntity>
     {
-        public PagedResultDtoEntity()
+        public PagedResultEntity()
         {
         }
 
-        public PagedResultDtoEntity(List<TEntity> itemCollection, int totalCount)
+        public PagedResultEntity(List<TEntity> itemCollection, int totalCount)
         {
             ItemCollection = itemCollection;
             TotalCount = totalCount;

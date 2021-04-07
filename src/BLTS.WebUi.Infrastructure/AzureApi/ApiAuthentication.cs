@@ -11,12 +11,12 @@ namespace BLTS.WebApi.Infrastructure.AzureApi
 {
     public class ApiAuthentication
     {
-        private readonly ApplicationLogTools _applicationLogTools;
+        private readonly IApplicationLogTools _applicationLogTools;
         private readonly ConfigurationManager _configurationManager;
         private readonly HttpClient _httpClient;
 
         public ApiAuthentication(ConfigurationManager configurationManager
-                               , ApplicationLogTools applicationLogTools
+                               , IApplicationLogTools applicationLogTools
                                , HttpClient httpClient)
         {
             _applicationLogTools = applicationLogTools;

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BLTS.WebApi.DtoModels;
-using BLTS.WebApi.FileStorages.Dto;
 using BLTS.WebApi.Logs;
 using BLTS.WebApi.Models;
 using Microsoft.AspNetCore.Http;
@@ -20,11 +19,11 @@ namespace BLTS.WebApi.FileStorages
     [ApiController]
     public class FileStorageController : ControllerBase
     {
-        private readonly ApplicationLogTools _applicationLogTools;
+        private readonly IApplicationLogTools _applicationLogTools;
         private readonly FileStorageManager _fileStorageManager;
         private readonly IMapper _mapper;
 
-        public FileStorageController(ApplicationLogTools applicationLogTools
+        public FileStorageController(IApplicationLogTools applicationLogTools
                                    , FileStorageManager fileStorageManager
                                    , IMapper mapper)
         {
@@ -49,7 +48,7 @@ namespace BLTS.WebApi.FileStorages
             catch (Exception fileStorageError)
             {
                 _applicationLogTools.LogError(fileStorageError, new Dictionary<string, dynamic> { { "ClassName", "WebApi.FileStorages" } });
-                throw fileStorageError;
+                return null;
             }
         }
 
@@ -76,11 +75,11 @@ namespace BLTS.WebApi.FileStorages
         }
 
         [HttpDelete]
-        public async Task<bool> Delete(DtoEntity<long> input)
+        public async Task<bool> Delete(long primaryKey)
         {
             try
             {
-                FileStorage currentDeletingObject = new FileStorage() { Id = input.Id };
+                FileStorage currentDeletingObject = new FileStorage() { Id = primaryKey };
 
                 return await _fileStorageManager.DeleteAsync(currentDeletingObject);
             }

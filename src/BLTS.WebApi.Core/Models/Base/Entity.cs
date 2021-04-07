@@ -7,7 +7,7 @@ namespace BLTS.WebApi.Models
     /// base entity used by the repository pattern
     /// </summary>
     /// <typeparam name="TPrimaryKey"></typeparam>
-    public abstract class Entity<TPrimaryKey>
+    public abstract class Entity<TPrimaryKey> : IEntity<TPrimaryKey>
     {
         protected Entity()
         {

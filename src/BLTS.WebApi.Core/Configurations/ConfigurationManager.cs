@@ -1,5 +1,4 @@
-﻿using BLTS.WebApi.InfrastructureInterfaces;
-using BLTS.WebApi.Models;
+﻿using BLTS.WebApi.Models;
 using BLTS.WebApi.Utilities;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -68,7 +67,7 @@ namespace BLTS.WebApi.Configurations
 
             #region load config data from DB storage
 
-            List<OperationalConfiguration> configurationColletion = _repositoryOperationalConfiguration.GetAll();
+            List<OperationalConfiguration> configurationColletion = _repositoryOperationalConfiguration.GetAll().ItemCollection;
 
             configurationColletion.AsParallel()
                                   .Where(singleConfigurationValue => singleConfigurationValue.IsConnectionString == false)
@@ -163,7 +162,7 @@ namespace BLTS.WebApi.Configurations
             if (isUpdateDatabase == true)
             {
 
-                OperationalConfiguration currentWorkingObject = _repositoryOperationalConfiguration.GetAll().Where(singleConfig => singleConfig.PropertyName == requestedConfigurationName).FirstOrDefault();
+                OperationalConfiguration currentWorkingObject = _repositoryOperationalConfiguration.GetAll().ItemCollection.Where(singleConfig => singleConfig.PropertyName == requestedConfigurationName).FirstOrDefault();
 
                 if (currentWorkingObject == null)
                 {
@@ -193,7 +192,7 @@ namespace BLTS.WebApi.Configurations
 
             if (isUpdateDatabase == true)
             {
-                OperationalConfiguration currentWorkingObject = _repositoryOperationalConfiguration.GetAll().Where(singleConfig => singleConfig.PropertyName == requestedConfigurationName).FirstOrDefault();
+                OperationalConfiguration currentWorkingObject = _repositoryOperationalConfiguration.GetAll().ItemCollection.Where(singleConfig => singleConfig.PropertyName == requestedConfigurationName).FirstOrDefault();
 
                 if (currentWorkingObject == null)
                 {
@@ -241,7 +240,7 @@ namespace BLTS.WebApi.Configurations
             VerifyConfigDataLoaded()["ConnectionStrings"].AddOrUpdate(requestedConfigurationName, newAssignmentValue, (Func<string, dynamic, dynamic>)((key, existingValue) => newAssignmentValue));
             if (isUpdateDatabase == true)
             {
-                OperationalConfiguration currentWorkingObject = _repositoryOperationalConfiguration.GetAll().Where(singleConfig => singleConfig.PropertyName == requestedConfigurationName).FirstOrDefault();
+                OperationalConfiguration currentWorkingObject = _repositoryOperationalConfiguration.GetAll().ItemCollection.Where(singleConfig => singleConfig.PropertyName == requestedConfigurationName).FirstOrDefault();
 
                 if (currentWorkingObject == null)
                 {
@@ -271,7 +270,7 @@ namespace BLTS.WebApi.Configurations
 
             if (isUpdateDatabase == true)
             {
-                OperationalConfiguration currentWorkingObject = _repositoryOperationalConfiguration.GetAll().Where(singleConfig => singleConfig.PropertyName == requestedConfigurationName).FirstOrDefault();
+                OperationalConfiguration currentWorkingObject = _repositoryOperationalConfiguration.GetAll().ItemCollection.Where(singleConfig => singleConfig.PropertyName == requestedConfigurationName).FirstOrDefault();
                 if (currentWorkingObject != null)
                 {
                     _repositoryOperationalConfiguration.Delete(currentWorkingObject);

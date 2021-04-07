@@ -1,8 +1,7 @@
-﻿using BLTS.WebApi.Models;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace BLTS.WebApi.InfrastructureInterfaces
+namespace BLTS.WebApi.Models
 {
     public interface IAzureFileStorage
     {

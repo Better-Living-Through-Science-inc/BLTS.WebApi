@@ -3,9 +3,9 @@ using BLTS.WebApi.Calculations;
 using BLTS.WebApi.Configurations;
 using BLTS.WebApi.FileStorages;
 using BLTS.WebApi.Infrastructure.Database;
-using BLTS.WebApi.InfrastructureInterfaces;
 using BLTS.WebApi.Logs;
 using BLTS.WebApi.Models;
+using BLTS.WebApi.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BLTS.WebApi.Web.Core
@@ -29,19 +29,22 @@ namespace BLTS.WebApi.Web.Core
         public void Initialize()
         {
             /*Application Services*/
-            _services.AddSingleton<ApplicationLogTools>();
+            _services.AddTransient<IApplicationLogTools, ApplicationLogTools>();
             _services.AddSingleton<ConfigurationManager>();
             _services.AddTransient<FileStorageManager>();
             _services.AddTransient<IMapper, Mapper>();
+            _services.AddTransient<ReflectionTools>();
+            _services.AddTransient<StringUtilities>();
             _services.AddTransient<UnitConversionLogic>();
 
+
             /*DB Repository Models*/
-            _services.AddTransient<IRepository<ApplicationLog, long>, Repository<ApplicationLog, long>>();
-            _services.AddTransient<IRepository<FileStorage, long>, Repository<FileStorage, long>>();
-            _services.AddTransient<IRepository<NavigationMenu, long>, Repository<NavigationMenu, long>>();
-            _services.AddTransient<IRepository<OperationalConfiguration, long>, Repository<OperationalConfiguration, long>>();
-            _services.AddTransient<IRepository<WebpageContent, long>, Repository<WebpageContent, long>>();
-            _services.AddTransient<IRepository<Website, long>, Repository<Website, long>>();
+            _services.AddTransient<IRepository<ApplicationLog, long>, Repository<ApplicationLog, long, WebDbContext>>();
+            _services.AddTransient<IRepository<FileStorage, long>, Repository<FileStorage, long, WebDbContext>>();
+            _services.AddTransient<IRepository<NavigationMenu, long>, Repository<NavigationMenu, long, WebDbContext>>();
+            _services.AddTransient<IRepository<OperationalConfiguration, long>, Repository<OperationalConfiguration, long, WebDbContext>>();
+            _services.AddTransient<IRepository<WebpageContent, long>, Repository<WebpageContent, long, WebDbContext>>();
+            _services.AddTransient<IRepository<Website, long>, Repository<Website, long, WebDbContext>>();
 
             /*Api Repository Models*/
             //_services.AddTransient<IApiRepository<Weather, WeatherDto, CreateUpdateWeatherDto, long>, ApiRepository<Weather, WeatherDto, CreateUpdateWeatherDto, long>>();

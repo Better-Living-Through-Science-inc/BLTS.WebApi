@@ -2,7 +2,7 @@
 
 namespace BLTS.WebApi.DtoModels
 {
-    public class FileStoragePagedResultRequestDto : PagedResultRequestDtoEntity<FileStorage>
+    public class OperationalConfigurationPagedResultRequestDto : PagedResultRequestDtoEntity<OperationalConfiguration>
     {
         public bool IncludeDeleted { get; set; }
     }

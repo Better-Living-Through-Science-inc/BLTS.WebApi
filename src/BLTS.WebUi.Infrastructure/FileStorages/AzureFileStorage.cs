@@ -1,15 +1,12 @@
 ﻿using BLTS.WebApi.Configurations;
-using BLTS.WebApi.InfrastructureInterfaces;
 using BLTS.WebApi.Logs;
 using BLTS.WebApi.Models;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.File;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,11 +14,11 @@ namespace BLTS.WebUi.Infrastructure.FileStorages
 {
     public class AzureFileStorage : IAzureFileStorage
     {
-        private ApplicationLogTools _applicationLogTools;
+        private IApplicationLogTools _applicationLogTools;
         private ConfigurationManager _configurationManager;
         private readonly IRepository<FileStorage, long> _repositoryFileStorage;
 
-        public AzureFileStorage(ApplicationLogTools applicationLogTools
+        public AzureFileStorage(IApplicationLogTools applicationLogTools
                               , ConfigurationManager configurationManager
                               , IRepository<FileStorage, long> repositoryFileStorage)
         {

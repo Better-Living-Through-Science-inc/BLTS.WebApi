@@ -1,6 +1,4 @@
-﻿using BLTS.WebApi.InfrastructureInterfaces;
-using BLTS.WebApi.Models;
-using System.IO;
+﻿using BLTS.WebApi.Models;
 using System.Threading;
 using System.Threading.Tasks;
 

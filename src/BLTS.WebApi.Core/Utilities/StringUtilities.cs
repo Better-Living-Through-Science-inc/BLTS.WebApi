@@ -12,17 +12,27 @@ namespace BLTS.WebApi.Utilities
 {
     public class StringUtilities
     {
-        #region  string arrays
-        private string[] smallNumbers = new string[] { "Zero", "One", "Two",
+        protected readonly ReflectionTools _reflectionTools;
+
+        private string[] smallNumbers;
+        private string[] _tens;
+        private string[] scaleNumbers;
+
+        public StringUtilities(ReflectionTools reflectionTools)
+        {
+            _reflectionTools = reflectionTools;
+
+            smallNumbers = new string[] { "Zero", "One", "Two",
                 "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
                 "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
                 "Seventeen", "Eighteen", "Nineteen" };
 
-        private string[] _tens = new string[] { "", "", "Twenty", "Thirty", "Forty",
+            _tens = new string[] { "", "", "Twenty", "Thirty", "Forty",
                 "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
 
-        private string[] scaleNumbers = new string[] { "", "Thousand", "Million", "Billion" };
-        #endregion
+            scaleNumbers = new string[] { "", "Thousand", "Million", "Billion" };
+
+        }
 
         /// <summary>
         /// 
@@ -104,7 +114,7 @@ namespace BLTS.WebApi.Utilities
             ConcurrentBag<T> returnCollection = new ConcurrentBag<T>();
             if (!string.IsNullOrWhiteSpace(valueCollection))
                 foreach (string singleListItem in valueCollection.Split(separator.ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
-                    returnCollection.Add(ReflectionTools.ConvertObjectToType<T>(singleListItem));
+                    returnCollection.Add(_reflectionTools.ConvertObjectToType<T>(singleListItem));
 
             return returnCollection;
         }

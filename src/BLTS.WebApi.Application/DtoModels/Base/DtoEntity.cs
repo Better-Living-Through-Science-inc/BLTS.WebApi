@@ -6,13 +6,10 @@ namespace BLTS.WebApi.DtoModels
     /// base entity used by the repository pattern
     /// </summary>
     /// <typeparam name="TPrimaryKey"></typeparam>
-    public abstract class DtoEntity<TPrimaryKey>
+    public abstract class DtoEntity<TPrimaryKey> : IDtoEntity<TPrimaryKey>
     {
-        protected DtoEntity()
+        public DtoEntity()
         {
-            CreationDate = DateTime.UtcNow;
-            LastModificationDate = CreationDate;
-            IsDeleted = false;
         }
 
         /// <summary>

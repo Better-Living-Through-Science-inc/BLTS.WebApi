@@ -1,6 +1,4 @@
-﻿using BLTS.WebApi.DtoModels;
-
-namespace BLTS.WebApi.FileStorages.Dto
+﻿namespace BLTS.WebApi.DtoModels
 {
     public partial class FileStorageDto : DtoEntity<long>
     {

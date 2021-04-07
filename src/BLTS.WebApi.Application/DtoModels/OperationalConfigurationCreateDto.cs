@@ -1,4 +1,4 @@
-﻿namespace BLTS.WebApi.Configuration.Dto
+﻿namespace BLTS.WebApi.DtoModels
 {
     public class OperationalConfigurationCreateDto
     {

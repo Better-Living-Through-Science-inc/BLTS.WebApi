@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BLTS.WebApi.Configurations;
-using BLTS.WebApi.InfrastructureInterfaces;
 using BLTS.WebApi.Infrastructure.AzureApi.Models;
 using BLTS.WebApi.Logs;
 using BLTS.WebApi.Models;

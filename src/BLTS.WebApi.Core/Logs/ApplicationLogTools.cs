@@ -1,5 +1,4 @@
 ﻿using BLTS.WebApi.Configurations;
-using BLTS.WebApi.InfrastructureInterfaces;
 using BLTS.WebApi.Models;
 //using Microsoft.AppCenter.Analytics;
 using System;
@@ -12,7 +11,7 @@ namespace BLTS.WebApi.Logs
     /// <summary>
     /// provides easy logging to multiple sources for the system
     /// </summary>
-    public class ApplicationLogTools
+    public class ApplicationLogTools : IApplicationLogTools
     {
         private IRepository<ApplicationLog, long> _repositoryApplicationLog;
         private ConfigurationManager _configurationManager;
