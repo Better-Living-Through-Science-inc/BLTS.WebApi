@@ -10,10 +10,13 @@ using System.Threading.Tasks;
 
 namespace BLTS.WebApi.DtoModels
 {
+    [Produces("application/json")]
+    [Route("api/[controller]/[action]")]
+    [ApiController]
     public abstract class ApiControllerBase<TEntity, TDtoEntity, TPrimaryKey, TDeleteDtoEntity> : ControllerBase, IApiControllerBase<TEntity, TDtoEntity, TPrimaryKey, TDeleteDtoEntity>
         where TEntity : class, IEntity<TPrimaryKey>, new()
-        where TDtoEntity : IDtoEntity<TPrimaryKey>, new()
-        where TDeleteDtoEntity : IDeleteDtoEntity<TPrimaryKey>, new()
+        where TDtoEntity : class, IDtoEntity<TPrimaryKey>, new()
+        where TDeleteDtoEntity : class, IDeleteDtoEntity<TPrimaryKey>, new()
     {
         private readonly IApplicationLogTools _applicationLogTools;
         protected readonly IRepository<TEntity, TPrimaryKey> _repository;
@@ -38,7 +41,11 @@ namespace BLTS.WebApi.DtoModels
         {
             try
             {
-                return MapToDtoEntity(await _repository.GetAsync(input));
+                TEntity requestedObject = await _repository.GetAsync(input);
+                if (requestedObject != null)
+                    return MapToDtoEntity(requestedObject);
+                else
+                    return await Task.FromResult<TDtoEntity>(null);
             }
             catch (Exception apiControllerError)
             {
@@ -57,7 +64,8 @@ namespace BLTS.WebApi.DtoModels
         {
             try
             {
-                return MapToDtoEntityCollection(_repository.GetAll(input));
+                List<TEntity> requestedCollection = _repository.GetAll(input);
+                return MapToDtoEntityCollection(requestedCollection);
             }
             catch (Exception apiControllerError)
             {

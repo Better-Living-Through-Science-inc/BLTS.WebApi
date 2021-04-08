@@ -2,13 +2,11 @@
 using BLTS.WebApi.DtoModels;
 using BLTS.WebApi.Logs;
 using BLTS.WebApi.Models;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
-namespace BLTS.WebApi.Websites
+namespace BLTS.WebApi.WebsiteNavigations
 {
-    [Produces("application/json")]
-    [Route("api/[controller]/[action]")]
-    [ApiController]
+    [Authorize]
     public class WebsiteNavigationController : ApiControllerBase<NavigationMenu, NavigationMenuDtoEntity, long, DeleteDtoEntity<long>>
     {
         public WebsiteNavigationController(IApplicationLogTools applicationLogTools

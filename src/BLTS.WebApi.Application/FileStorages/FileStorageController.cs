@@ -2,6 +2,7 @@
 using BLTS.WebApi.DtoModels;
 using BLTS.WebApi.Logs;
 using BLTS.WebApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -17,6 +18,7 @@ namespace BLTS.WebApi.FileStorages
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class FileStorageController : ControllerBase
     {
         private readonly IApplicationLogTools _applicationLogTools;

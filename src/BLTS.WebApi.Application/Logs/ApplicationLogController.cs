@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace BLTS.WebApi.Logs
@@ -6,6 +7,7 @@ namespace BLTS.WebApi.Logs
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class ApplicationLogController : ControllerBase
     {
         private readonly IApplicationLogTools _applicationLogTools;

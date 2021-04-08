@@ -2,13 +2,11 @@
 using BLTS.WebApi.DtoModels;
 using BLTS.WebApi.Logs;
 using BLTS.WebApi.Models;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BLTS.WebApi.WebpageContents
 {
-    [Produces("application/json")]
-    [Route("api/[controller]/[action]")]
-    [ApiController]
+    [Authorize]
     public class Webpage : ApiControllerBase<WebpageContent, WebpageContentDtoEntity, long, DeleteDtoEntity<long>>
     {
         public Webpage(IApplicationLogTools applicationLogTools

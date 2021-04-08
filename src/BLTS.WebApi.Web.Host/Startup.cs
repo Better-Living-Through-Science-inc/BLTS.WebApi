@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
 using System.Linq;
+
 
 namespace BLTS.WebApi.Web
 {
@@ -76,6 +78,7 @@ namespace BLTS.WebApi.Web
 
             });
 
+            services.AddMicrosoftIdentityWebApiAuthentication(Configuration);
         }
 
         public void Configure(IApplicationBuilder app)
@@ -87,6 +90,8 @@ namespace BLTS.WebApi.Web
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

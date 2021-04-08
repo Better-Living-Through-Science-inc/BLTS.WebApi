@@ -1,4 +1,5 @@
 ﻿using BLTS.WebApi.DtoModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -7,6 +8,7 @@ namespace BLTS.WebApi.Configurations
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class ConfigurationController : ControllerBase
     {
         private ConfigurationManager _configurationManager;
