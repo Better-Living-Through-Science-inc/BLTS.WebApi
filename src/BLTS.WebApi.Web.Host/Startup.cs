@@ -29,6 +29,9 @@ namespace BLTS.WebApi.Web
             Core.Startup applicationServicesStartup = new Core.Startup(services, Configuration);
             applicationServicesStartup.Initialize();
 
+            services.AddMicrosoftIdentityWebApiAuthentication(Configuration, "AzureAd");
+
+            services.AddControllers();
             services.AddControllersWithViews();
 
             services.AddCors(
@@ -78,7 +81,7 @@ namespace BLTS.WebApi.Web
 
             });
 
-            services.AddMicrosoftIdentityWebApiAuthentication(Configuration);
+
         }
 
         public void Configure(IApplicationBuilder app)
