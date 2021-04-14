@@ -5,7 +5,7 @@ using BLTS.WebApi.Models;
 
 namespace BLTS.WebApi.ApiControllers
 {
-    public class WebpageContentController : ApiControllerBase<WebpageContent, WebpageContentDtoEntity, long, DeleteDtoEntity<long>>
+    public class WebpageContentController : ApiAuthorizedControllerBase<WebpageContent, WebpageContentDtoEntity, long, DeleteDtoEntity<long>>
     {
         /// <summary>
         /// default constructor

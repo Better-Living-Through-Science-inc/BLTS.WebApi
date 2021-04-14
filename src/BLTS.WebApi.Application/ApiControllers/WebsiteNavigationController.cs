@@ -5,7 +5,7 @@ using BLTS.WebApi.Models;
 
 namespace BLTS.WebApi.ApiControllers
 {
-    public class WebsiteNavigationController : ApiControllerBase<NavigationMenu, NavigationMenuDtoEntity, long, DeleteDtoEntity<long>>
+    public class WebsiteNavigationController : ApiAuthorizedControllerBase<NavigationMenu, NavigationMenuDtoEntity, long, DeleteDtoEntity<long>>
     {
         /// <summary>
         /// default constructor

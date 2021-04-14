@@ -1,18 +1,17 @@
 ﻿using AutoMapper;
 using AutoMapper.Internal;
+using BLTS.WebApi.DtoModels;
 using BLTS.WebApi.Logs;
 using BLTS.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
 
-namespace BLTS.WebApi.DtoModels
+namespace BLTS.WebApi.ApiControllers
 {
     /// <summary>
     /// Generic API controller for permission based data access

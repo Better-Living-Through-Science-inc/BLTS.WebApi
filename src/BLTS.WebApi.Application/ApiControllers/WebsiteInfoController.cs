@@ -5,7 +5,7 @@ using BLTS.WebApi.Models;
 
 namespace BLTS.WebApi.ApiControllers
 {
-    public class WebsiteInfoController : ApiControllerBase<WebsiteInfo, WebsiteInfoDtoEntity, long, DeleteDtoEntity<long>>
+    public class WebsiteInfoController : ApiAuthorizedControllerBase<WebsiteInfo, WebsiteInfoDtoEntity, long, DeleteDtoEntity<long>>
     {
         /// <summary>
         /// default constructor
