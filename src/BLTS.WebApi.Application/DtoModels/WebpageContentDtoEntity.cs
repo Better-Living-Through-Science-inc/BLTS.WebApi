@@ -1,11 +1,13 @@
 ﻿using BLTS.WebApi.DtoModels;
+using System.Collections.Generic;
 
-namespace BLTS.WebApi.Models
+namespace BLTS.WebApi.DtoModels
 {
     public partial class WebpageContentDtoEntity : DtoEntity<long>
     {
         public WebpageContentDtoEntity()
         {
+            NavigationMenuCollection = new List<NavigationMenuDtoEntity>();
         }
 
         public string Title { get; set; }
@@ -13,5 +15,8 @@ namespace BLTS.WebApi.Models
         public string Description { get; set; }
         public string Body { get; set; }
         public string Footer { get; set; }
+        public bool IsAuthorizationRequired { get; set; }
+
+        public virtual List<NavigationMenuDtoEntity> NavigationMenuCollection { get; set; }
     }
 }

@@ -1,36 +1,67 @@
 ﻿using BLTS.WebApi.Configurations;
 using BLTS.WebApi.Logs;
 using BLTS.WebApi.Models;
+using BLTS.WebApi.Users;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Security.Claims;
-using System.Security.Principal;
 
-namespace BLTS.WebApi.WebsiteNavigations
+namespace BLTS.WebApi.CmsOutput
 {
-    public class WebsiteNavigationMenuManager
+    public class CmsOutputManager
     {
         private readonly IApplicationLogTools _applicationLogTools;
         private readonly IRepository<NavigationMenu, long> _repositoryNavigationMenu;
         private readonly IRepository<WebsiteInfo, long> _repositoryWebsiteInfo;
         private readonly ConfigurationManager _configurationManager;
+        private readonly UserManager _userManager;
 
-        public WebsiteNavigationMenuManager(IApplicationLogTools applicationLogTools
-                                          , IRepository<NavigationMenu, long> repositoryNavigationMenu
-                                          , IRepository<WebsiteInfo, long> repositoryWebsiteInfo
-                                          , ConfigurationManager configurationManager)
+        public CmsOutputManager(IApplicationLogTools applicationLogTools
+                              , IRepository<NavigationMenu, long> repositoryNavigationMenu
+                              , IRepository<WebsiteInfo, long> repositoryWebsiteInfo
+                              , ConfigurationManager configurationManager
+                              , UserManager userManager)
         {
             _applicationLogTools = applicationLogTools;
             _repositoryNavigationMenu = repositoryNavigationMenu;
             _repositoryWebsiteInfo = repositoryWebsiteInfo;
             _configurationManager = configurationManager;
+            _userManager = userManager;
         }
 
+        /// <summary>
+        /// returns the base information for a website
+        /// </summary>
+        /// <param name="websiteBaseUrl"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public WebsiteInfo GetWebsiteInformation(string websiteBaseUrl, ClaimsPrincipal user)
+        {
+            List<string> userGroupMembershipCollection = _userManager.GetUserGroupMembershipCollection(user);
+
+            WebsiteInfo authorizedWebsiteInfo = _repositoryWebsiteInfo.Get(singleWebsiteInfo => singleWebsiteInfo.BaseUrl == websiteBaseUrl
+                                                                                             && singleWebsiteInfo.IsEnabled == true
+                                                                                             && (singleWebsiteInfo.IsAuthorizationRequired == false
+                                                                                             || singleWebsiteInfo.WebsitePermissionCollection.Any(singlePermission => singlePermission.IsEnabled == true
+                                                                                                                                                                   && userGroupMembershipCollection.Contains(singlePermission.ActiveDirectoryGroup.GroupSid)
+                                                                                                                                                 )
+                                                                                                 )
+                                                                           )
+                                                                      .FirstOrDefault();//correct site or null
+
+            return authorizedWebsiteInfo;
+        }
+
+        /// <summary>
+        /// returns the nav menus for a website
+        /// </summary>
+        /// <param name="websiteBaseUrl"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public List<NavigationMenu> GetWebsiteNavigationMenu(string websiteBaseUrl, ClaimsPrincipal user)
         {
-            List<string> userGroupMembershipCollection = ((ClaimsIdentity)user.Identity).Claims.Where(x => x.Type.Equals("groups")).Select(singleGroup => singleGroup.Value).ToList();
+            List<string> userGroupMembershipCollection = _userManager.GetUserGroupMembershipCollection(user);
 
             Dictionary<long, List<NavigationMenu>> authorizedMenuDictionary =
                 //filter permissable menus

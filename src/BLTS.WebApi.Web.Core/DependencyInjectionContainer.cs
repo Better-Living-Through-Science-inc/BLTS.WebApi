@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using BLTS.WebApi.Calculations;
+using BLTS.WebApi.CmsOutput;
 using BLTS.WebApi.Configurations;
 using BLTS.WebApi.FileStorages;
 using BLTS.WebApi.Infrastructure.Database;
 using BLTS.WebApi.Logs;
 using BLTS.WebApi.Models;
+using BLTS.WebApi.Users;
 using BLTS.WebApi.Utilities;
-using BLTS.WebApi.WebsiteNavigations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BLTS.WebApi.Web.Core
@@ -31,13 +32,14 @@ namespace BLTS.WebApi.Web.Core
         {
             /*Application Services*/
             _services.AddTransient<IApplicationLogTools, ApplicationLogTools>();
+            _services.AddTransient<CmsOutputManager>();
             _services.AddTransient<ConfigurationManager>();
             _services.AddTransient<FileStorageManager>();
             _services.AddTransient<IMapper, Mapper>();
             _services.AddTransient<ReflectionTools>();
             _services.AddTransient<StringUtilities>();
             _services.AddTransient<UnitConversionLogic>();
-            _services.AddTransient<WebsiteNavigationMenuManager>();
+            _services.AddTransient<UserManager>();
 
 
             /*DB Repository Models*/

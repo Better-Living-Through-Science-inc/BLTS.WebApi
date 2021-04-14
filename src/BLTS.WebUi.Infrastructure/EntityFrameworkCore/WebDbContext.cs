@@ -236,6 +236,10 @@ namespace BLTS.WebApi.Infrastructure.Database
                     .IsRequired()
                     .HasDefaultValueSql("((0))");
 
+                entity.Property(e => e.DisplayOrder)
+                    .IsRequired()
+                    .HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.NavLinkText)
                     .IsRequired()
                     .HasMaxLength(255);

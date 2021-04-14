@@ -22,7 +22,7 @@ namespace BLTS.WebApi.Web.Core
             CreateMap<PagedResultDtoEntity<NavigationMenuDtoEntity>, IPagedResultEntity<NavigationMenu>>();
             CreateMap<NavigationMenu, NavigationMenuDtoEntity>();
             CreateMap<NavigationMenuDtoEntity, NavigationMenu>();
-            CreateMap<NavigationMenu, WebsiteNavigationMenuDtoEntity>();
+            CreateMap<NavigationMenu, CmsNavigationMenuDtoEntity>();
 
             CreateMap<IPagedResultRequestEntity<WebpageContent>, PagedResultRequestDtoEntity<WebpageContentDtoEntity>>();
             CreateMap<PagedResultRequestDtoEntity<WebpageContentDtoEntity>, IPagedResultRequestEntity<WebpageContent>>();
@@ -37,6 +37,7 @@ namespace BLTS.WebApi.Web.Core
             CreateMap<PagedResultDtoEntity<WebsiteInfoDtoEntity>, IPagedResultEntity<WebsiteInfo>>();
             CreateMap<WebsiteInfo, WebsiteInfoDtoEntity>();
             CreateMap<WebsiteInfoDtoEntity, WebsiteInfo>();
+            CreateMap<WebsiteInfo, CmsWebsiteInfoDtoEntity>();
         }
     }
 }

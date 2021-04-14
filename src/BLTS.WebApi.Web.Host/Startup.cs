@@ -16,7 +16,7 @@ namespace BLTS.WebApi.Web
     public class Startup
     {
         private const string _defaultCorsPolicyName = "DefaultCorsPolicy";
-        private const string _apiVersion = "v1";
+        private const string _apiVersion = "v0.0.1";
         public IConfiguration Configuration { get; }
 
 
@@ -78,7 +78,6 @@ namespace BLTS.WebApi.Web
                     //}
                 });
 
-                //string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 string xmlFile = $"BLTS.WebApi.Application.xml";
                 string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
@@ -118,6 +117,19 @@ namespace BLTS.WebApi.Web
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.Use(async (context, next) =>
+            {
+                await next();
+                if (context.Response.StatusCode == 404
+                && !Path.HasExtension(context.Request.Path.Value)
+                && !context.Request.Path.Value.StartsWith("/api/services", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    context.Request.Path = "/swagger";
+                    await next();
+                }
+            });
+
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,4 +1,7 @@
-﻿namespace BLTS.WebApi.DtoModels
+﻿using BLTS.WebApi.Models;
+using System.Collections.Generic;
+
+namespace BLTS.WebApi.DtoModels
 {
     public partial class WebsiteInfoDtoEntity : DtoEntity<long>
     {
@@ -6,7 +9,7 @@
         {
         }
 
-        public long ApplicationId { get; set; }
+        public long ApplicationInfoId { get; set; }
         public string Name { get; set; }
         public string Metatag { get; set; }
         public string Title { get; set; }
@@ -14,5 +17,9 @@
         public string Footer { get; set; }
         public string BaseUrl { get; set; }
         public string CssThemePath { get; set; }
+        public bool IsAuthorizationRequired { get; set; }
+        public bool? IsEnabled { get; set; }
+
+        public virtual ApplicationInfoDtoEntity ApplicationInfo { get; set; }
     }
 }

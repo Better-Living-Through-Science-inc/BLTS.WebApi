@@ -1,8 +1,6 @@
-﻿using BLTS.WebApi.Models;
-
-namespace BLTS.WebApi.DtoModels
+﻿namespace BLTS.WebApi.DtoModels
 {
-    public class FileStoragePagedResultRequestDto : PagedResultRequestDtoEntity<FileStorage>
+    public class FileStoragePagedResultRequestDto : PagedResultRequestDtoEntity<FileStorageDto>
     {
         public bool IncludeDeleted { get; set; }
     }

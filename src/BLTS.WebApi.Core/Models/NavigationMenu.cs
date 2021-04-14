@@ -14,6 +14,7 @@ namespace BLTS.WebApi.Models
         public long ParentNavigationMenuId { get; set; }
         public long WebpageContentId { get; set; }
         public string DisplayText { get; set; }
+        public int DisplayOrder { get; set; }
         public string ToolTip { get; set; }
         public string SubPath { get; set; }
         public string IconClass { get; set; }
