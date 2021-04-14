@@ -70,7 +70,7 @@ namespace BLTS.WebApi.DtoModels
             }
             catch (Exception apiControllerError)
             {
-                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiControllerBase<{typeof(TEntity).Name}>" } });
+                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiAuthorizedControllerBase<{typeof(TEntity).Name}>" } });
 
                 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals("Development", StringComparison.InvariantCultureIgnoreCase))
                     return base.StatusCode(500, apiControllerError);
@@ -97,7 +97,7 @@ namespace BLTS.WebApi.DtoModels
             }
             catch (Exception apiControllerError)
             {
-                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiControllerBase<{typeof(TEntity).Name}>" } });
+                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiAuthorizedControllerBase<{typeof(TEntity).Name}>" } });
                 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals("Development", StringComparison.InvariantCultureIgnoreCase))
                     return base.StatusCode(500, apiControllerError);
                 else
@@ -128,7 +128,7 @@ namespace BLTS.WebApi.DtoModels
             }
             catch (Exception apiControllerError)
             {
-                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiControllerBase<{typeof(TEntity).Name}>" } });
+                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiAuthorizedControllerBase<{typeof(TEntity).Name}>" } });
                 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals("Development", StringComparison.InvariantCultureIgnoreCase))
                     return base.StatusCode(500, apiControllerError);
                 else
@@ -154,7 +154,7 @@ namespace BLTS.WebApi.DtoModels
             }
             catch (Exception apiControllerError)
             {
-                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiControllerBase<{typeof(TEntity).Name}>" } });
+                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiAuthorizedControllerBase<{typeof(TEntity).Name}>" } });
                 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals("Development", StringComparison.InvariantCultureIgnoreCase))
                     return base.StatusCode(500, apiControllerError);
                 else
@@ -182,7 +182,7 @@ namespace BLTS.WebApi.DtoModels
             }
             catch (Exception apiControllerError)
             {
-                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiControllerBase<{typeof(TEntity).Name}>" } });
+                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiAuthorizedControllerBase<{typeof(TEntity).Name}>" } });
                 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals("Development", StringComparison.InvariantCultureIgnoreCase))
                     return base.StatusCode(500, apiControllerError);
                 else
@@ -208,7 +208,7 @@ namespace BLTS.WebApi.DtoModels
             }
             catch (Exception apiControllerError)
             {
-                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiControllerBase<{typeof(TEntity).Name}>" } });
+                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiAuthorizedControllerBase<{typeof(TEntity).Name}>" } });
                 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals("Development", StringComparison.InvariantCultureIgnoreCase))
                     return base.StatusCode(500, apiControllerError);
                 else
@@ -233,7 +233,7 @@ namespace BLTS.WebApi.DtoModels
             }
             catch (Exception apiControllerError)
             {
-                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiControllerBase<{typeof(TEntity).Name}>" } });
+                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiAuthorizedControllerBase<{typeof(TEntity).Name}>" } });
                 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals("Development", StringComparison.InvariantCultureIgnoreCase))
                     return base.StatusCode(500, apiControllerError);
                 else
@@ -256,7 +256,7 @@ namespace BLTS.WebApi.DtoModels
             }
             catch (Exception apiControllerError)
             {
-                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiControllerBase<{typeof(TEntity).Name}>" } });
+                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiAuthorizedControllerBase<{typeof(TEntity).Name}>" } });
                 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals("Development", StringComparison.InvariantCultureIgnoreCase))
                     return base.StatusCode(500, apiControllerError);
                 else
@@ -296,7 +296,7 @@ namespace BLTS.WebApi.DtoModels
             }
             catch (Exception apiControllerError)
             {
-                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiControllerBase<{typeof(TEntity).Name}>" } });
+                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiAuthorizedControllerBase<{typeof(TEntity).Name}>" } });
                 if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").Equals("Development", StringComparison.InvariantCultureIgnoreCase))
                     return base.StatusCode(500, apiControllerError);
                 else
@@ -317,7 +317,7 @@ namespace BLTS.WebApi.DtoModels
             }
             catch (Exception apiControllerError)
             {
-                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiControllerBase<{typeof(TEntity).Name}>" } });
+                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiAuthorizedControllerBase<{typeof(TEntity).Name}>" } });
                 throw;
             }
         }
@@ -330,7 +330,7 @@ namespace BLTS.WebApi.DtoModels
             }
             catch (Exception apiControllerError)
             {
-                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiControllerBase<{typeof(TEntity).Name}>" } });
+                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiAuthorizedControllerBase<{typeof(TEntity).Name}>" } });
                 throw;
             }
         }
@@ -343,7 +343,7 @@ namespace BLTS.WebApi.DtoModels
             }
             catch (Exception apiControllerError)
             {
-                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiControllerBase<{typeof(TEntity).Name}>" } });
+                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiAuthorizedControllerBase<{typeof(TEntity).Name}>" } });
                 throw;
             }
         }
@@ -356,7 +356,7 @@ namespace BLTS.WebApi.DtoModels
             }
             catch (Exception apiControllerError)
             {
-                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiControllerBase<{typeof(TEntity).Name}>" } });
+                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiAuthorizedControllerBase<{typeof(TEntity).Name}>" } });
                 throw;
             }
         }
@@ -369,7 +369,7 @@ namespace BLTS.WebApi.DtoModels
             }
             catch (Exception apiControllerError)
             {
-                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiControllerBase<{typeof(TEntity).Name}>" } });
+                _applicationLogTools.LogError(apiControllerError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiAuthorizedControllerBase<{typeof(TEntity).Name}>" } });
                 throw;
             }
         }

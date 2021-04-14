@@ -4,6 +4,14 @@
         <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <WarningsAsErrors>;NU1605;NU1202</WarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <WarningsAsErrors>;NU1605;NU1202</WarningsAsErrors>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="10.1.1" />
         <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
