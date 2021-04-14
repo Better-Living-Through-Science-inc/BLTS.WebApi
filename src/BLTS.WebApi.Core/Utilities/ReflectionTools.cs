@@ -220,6 +220,9 @@ namespace BLTS.WebApi.Utilities
                         if (singleObjectPropertyValue.Equals(Create(singleObjectProperty.PropertyType)))
                             isIgnorePropertyByRule = true;
                 }
+                else //ignore objects
+                    isIgnorePropertyByRule = true;
+
 
                 if (!isIgnorePropertyByRule)
                     validCollectionOfProperties.TryAdd(singleObjectProperty, singleObjectPropertyValue);

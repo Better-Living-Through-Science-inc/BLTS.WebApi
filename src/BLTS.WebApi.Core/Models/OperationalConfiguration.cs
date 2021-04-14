@@ -10,7 +10,7 @@ namespace BLTS.WebApi.Models
             IsEnabled = true;
         }
 
-        public long ApplicationId { get; set; }
+        public long ApplicationInfoId { get; set; }
         public string PropertyName { get; set; }
         public string Description { get; set; }
         public bool? BoolValue { get; set; }
@@ -23,6 +23,6 @@ namespace BLTS.WebApi.Models
         public bool IsConnectionString { get; set; }
         public bool IsEnabled { get; set; }
 
-        public virtual Application Application { get; set; }
+        public virtual ApplicationInfo ApplicationInfo { get; set; }
     }
 }

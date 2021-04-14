@@ -81,7 +81,7 @@ namespace BLTS.WebUi.Infrastructure.FileStorages
             catch (Exception fileStorageError)
             {
                 _applicationLogTools.LogError(fileStorageError, new Dictionary<string, dynamic> { { "ClassName", "Infrastructure.FileStorages" } });
-                throw fileStorageError;
+                throw;
             }
         }
 
@@ -110,7 +110,7 @@ namespace BLTS.WebUi.Infrastructure.FileStorages
             catch (Exception fileStorageError)
             {
                 _applicationLogTools.LogError(fileStorageError, new Dictionary<string, dynamic> { { "ClassName", "Infrastructure.FileStorages" } });
-                throw fileStorageError;
+                throw;
             }
 
             return entity;

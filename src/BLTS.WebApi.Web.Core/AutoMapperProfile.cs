@@ -9,12 +9,12 @@ namespace BLTS.WebApi.Web.Core
         public AutoMapperProfile()
         {
 
-            CreateMap<IPagedResultRequestEntity<Application>, PagedResultRequestDtoEntity<ApplicationDtoEntity>>();
-            CreateMap<PagedResultRequestDtoEntity<ApplicationDtoEntity>, IPagedResultRequestEntity<Application>>();
-            CreateMap<IPagedResultEntity<Application>, PagedResultDtoEntity<ApplicationDtoEntity>>();
-            CreateMap<PagedResultDtoEntity<ApplicationDtoEntity>, IPagedResultEntity<Application>>();
-            CreateMap<Application, ApplicationDtoEntity>();
-            CreateMap<ApplicationDtoEntity, Application>();
+            CreateMap<IPagedResultRequestEntity<ApplicationInfo>, PagedResultRequestDtoEntity<ApplicationInfoDtoEntity>>();
+            CreateMap<PagedResultRequestDtoEntity<ApplicationInfoDtoEntity>, IPagedResultRequestEntity<ApplicationInfo>>();
+            CreateMap<IPagedResultEntity<ApplicationInfo>, PagedResultDtoEntity<ApplicationInfoDtoEntity>>();
+            CreateMap<PagedResultDtoEntity<ApplicationInfoDtoEntity>, IPagedResultEntity<ApplicationInfo>>();
+            CreateMap<ApplicationInfo, ApplicationInfoDtoEntity>();
+            CreateMap<ApplicationInfoDtoEntity, ApplicationInfo>();
 
             CreateMap<IPagedResultRequestEntity<NavigationMenu>, PagedResultRequestDtoEntity<NavigationMenuDtoEntity>>();
             CreateMap<PagedResultRequestDtoEntity<NavigationMenuDtoEntity>, IPagedResultRequestEntity<NavigationMenu>>();
@@ -22,6 +22,7 @@ namespace BLTS.WebApi.Web.Core
             CreateMap<PagedResultDtoEntity<NavigationMenuDtoEntity>, IPagedResultEntity<NavigationMenu>>();
             CreateMap<NavigationMenu, NavigationMenuDtoEntity>();
             CreateMap<NavigationMenuDtoEntity, NavigationMenu>();
+            CreateMap<NavigationMenu, WebsiteNavigationMenuDtoEntity>();
 
             CreateMap<IPagedResultRequestEntity<WebpageContent>, PagedResultRequestDtoEntity<WebpageContentDtoEntity>>();
             CreateMap<PagedResultRequestDtoEntity<WebpageContentDtoEntity>, IPagedResultRequestEntity<WebpageContent>>();
@@ -30,12 +31,12 @@ namespace BLTS.WebApi.Web.Core
             CreateMap<WebpageContent, WebpageContentDtoEntity>();
             CreateMap<WebpageContentDtoEntity, WebpageContent>();
 
-            CreateMap<IPagedResultRequestEntity<Website>, PagedResultRequestDtoEntity<WebsiteDtoEntity>>();
-            CreateMap<PagedResultRequestDtoEntity<WebsiteDtoEntity>, IPagedResultRequestEntity<Website>>();
-            CreateMap<IPagedResultEntity<Website>, PagedResultDtoEntity<WebsiteDtoEntity>>();
-            CreateMap<PagedResultDtoEntity<WebsiteDtoEntity>, IPagedResultEntity<Website>>();
-            CreateMap<Website, WebsiteDtoEntity>();
-            CreateMap<WebsiteDtoEntity, Website>();
+            CreateMap<IPagedResultRequestEntity<WebsiteInfo>, PagedResultRequestDtoEntity<WebsiteInfoDtoEntity>>();
+            CreateMap<PagedResultRequestDtoEntity<WebsiteInfoDtoEntity>, IPagedResultRequestEntity<WebsiteInfo>>();
+            CreateMap<IPagedResultEntity<WebsiteInfo>, PagedResultDtoEntity<WebsiteInfoDtoEntity>>();
+            CreateMap<PagedResultDtoEntity<WebsiteInfoDtoEntity>, IPagedResultEntity<WebsiteInfo>>();
+            CreateMap<WebsiteInfo, WebsiteInfoDtoEntity>();
+            CreateMap<WebsiteInfoDtoEntity, WebsiteInfo>();
         }
     }
 }

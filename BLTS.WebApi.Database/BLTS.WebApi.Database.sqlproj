@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{36c35fed-e104-4ad5-9bcd-55c67bf85dfc}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -74,20 +74,22 @@
     <PreDeploy Include="Script.PreDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\Tables\Website.sql" />
-    <Build Include="Storage\log.sql" />
-    <Build Include="Storage\data_0.sql" />
     <Build Include="Storage\DateByMonthPartitionFunction.sql" />
     <Build Include="Storage\DateByMonthPartitionScheme.sql" />
-    <Build Include="Security\LOG.sql" />
+    <Build Include="Security\Log.sql" />
     <Build Include="Log\Tables\ApplicationLog.sql" />
     <Build Include="dbo\Tables\WebsiteNavigationMenu.sql" />
     <Build Include="dbo\Tables\WebpageContent.sql" />
     <Build Include="dbo\Tables\OperationalConfiguration.sql" />
-    <Build Include="dbo\Tables\NavigationMenuNavigationMenu.sql" />
     <Build Include="dbo\Tables\NavigationMenu.sql" />
     <Build Include="dbo\Tables\FileStorage.sql" />
     <Build Include="Security\User.sql" />
-    <Build Include="dbo\Tables\Application.sql" />
+    <Build Include="dbo\Tables\WebsitePermission.sql" />
+    <Build Include="dbo\Tables\WebsiteInfo.sql" />
+    <Build Include="dbo\Tables\WebpageContentPermission.sql" />
+    <Build Include="dbo\Tables\FileStoragePermission.sql" />
+    <Build Include="dbo\Tables\ApplicationPermission.sql" />
+    <Build Include="dbo\Tables\ApplicationInfo.sql" />
+    <Build Include="dbo\Tables\ActiveDirectoryGroup.sql" />
   </ItemGroup>
 </Project>

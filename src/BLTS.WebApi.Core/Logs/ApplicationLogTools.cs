@@ -104,7 +104,7 @@ namespace BLTS.WebApi.Logs
             {
                 ApplicationLog currentLogEntry = new ApplicationLog
                 {
-                    ApplicationId = actionDictionary.ContainsKey("ApplicationId") ? actionDictionary["ApplicationId"] : _configurationManager.GetCurrentApplicationId(),
+                    ApplicationInfoId = actionDictionary.ContainsKey("ApplicationId") ? actionDictionary["ApplicationId"] : _configurationManager.GetCurrentApplicationId(),
                     ApplicationName = $"{_configurationManager.GetValue("ApplicationName")} ver. {_configurationManager.GetValue("ApplicationVersion")}",
                     EnvironmentName = _configurationManager.GetValue("EnvironmentName"),
                     ExecutionTime = DateTime.Now.ToUniversalTime(),

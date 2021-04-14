@@ -1,8 +1,8 @@
 ﻿namespace BLTS.WebApi.DtoModels
 {
-    public partial class ApplicationDtoEntity : DtoEntity<long>
+    public partial class ApplicationInfoDtoEntity : DtoEntity<long>
     {
-        public ApplicationDtoEntity()
+        public ApplicationInfoDtoEntity()
         {
         }
 

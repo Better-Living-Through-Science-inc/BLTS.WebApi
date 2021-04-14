@@ -45,7 +45,7 @@ namespace BLTS.WebApi.Infrastructure.Database
 
         #region Get
         /// <summary>
-        /// returns unordered list of all entities that match the expression
+        /// returns IQueryable of entities that match the expression
         /// </summary>
         /// <returns></returns>
         public IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> expression)

@@ -2,16 +2,21 @@
 using AutoMapper.Internal;
 using BLTS.WebApi.Logs;
 using BLTS.WebApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace BLTS.WebApi.DtoModels
 {
     /// <summary>
-    /// Generic API controller for non permission based data access 
+    /// Generic API controller for permission based data access
+    /// todo: add user authentication and permisions based access vs just authenticated user
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TDtoEntity"></typeparam>
@@ -20,7 +25,8 @@ namespace BLTS.WebApi.DtoModels
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public abstract class ApiControllerBase<TEntity, TDtoEntity, TPrimaryKey, TDeleteDtoEntity> : ControllerBase, IApiControllerBase<TEntity, TDtoEntity, TPrimaryKey, TDeleteDtoEntity>
+    [Authorize]
+    public abstract class ApiAuthorizedControllerBase<TEntity, TDtoEntity, TPrimaryKey, TDeleteDtoEntity> : ControllerBase, IApiControllerBase<TEntity, TDtoEntity, TPrimaryKey, TDeleteDtoEntity>
         where TEntity : class, IEntity<TPrimaryKey>, new()
         where TDtoEntity : class, IDtoEntity<TPrimaryKey>, new()
         where TDeleteDtoEntity : class, IDeleteDtoEntity<TPrimaryKey>, new()
@@ -35,9 +41,9 @@ namespace BLTS.WebApi.DtoModels
         /// <param name="applicationLogTools"></param>
         /// <param name="repository"></param>
         /// <param name="mapper"></param>
-        public ApiControllerBase(IApplicationLogTools applicationLogTools
-                               , IRepository<TEntity, TPrimaryKey> repository
-                               , IMapper mapper)
+        public ApiAuthorizedControllerBase(IApplicationLogTools applicationLogTools
+                                         , IRepository<TEntity, TPrimaryKey> repository
+                                         , IMapper mapper)
         {
             _applicationLogTools = applicationLogTools;
             _repository = repository;
@@ -54,6 +60,8 @@ namespace BLTS.WebApi.DtoModels
         {
             try
             {
+                List<string> userGroupMembershipCollection = ((ClaimsIdentity)User.Identity).Claims.Where(x => x.Type.Equals("groups")).Select(singleGroup => singleGroup.Value).ToList();
+
                 TEntity requestedObject = await _repository.GetAsync(primaryKey);
                 if (requestedObject != null)
                     return Ok(MapToDtoEntity(requestedObject));

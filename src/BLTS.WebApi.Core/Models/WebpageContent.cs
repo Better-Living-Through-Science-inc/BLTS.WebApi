@@ -6,7 +6,8 @@ namespace BLTS.WebApi.Models
     {
         public WebpageContent()
         {
-            NavigationMenuCollection = new HashSet<NavigationMenu>();
+            NavigationMenuCollection = new List<NavigationMenu>();
+            WebpageContentPermissionCollection = new List<WebpageContentPermission>();
         }
 
         public string Title { get; set; }
@@ -14,7 +15,9 @@ namespace BLTS.WebApi.Models
         public string Description { get; set; }
         public string Body { get; set; }
         public string Footer { get; set; }
+        public bool IsAuthorizationRequired { get; set; }
 
-        public virtual ICollection<NavigationMenu> NavigationMenuCollection { get; set; }
+        public virtual List<NavigationMenu> NavigationMenuCollection { get; set; }
+        public virtual List<WebpageContentPermission> WebpageContentPermissionCollection { get; set; }
     }
 }

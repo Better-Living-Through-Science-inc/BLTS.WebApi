@@ -2,17 +2,22 @@
 using BLTS.WebApi.DtoModels;
 using BLTS.WebApi.Logs;
 using BLTS.WebApi.Models;
-using Microsoft.AspNetCore.Authorization;
 
-namespace BLTS.WebApi.WebsiteNavigations
+namespace BLTS.WebApi.ApiControllers
 {
-    [Authorize]
     public class WebsiteNavigationController : ApiControllerBase<NavigationMenu, NavigationMenuDtoEntity, long, DeleteDtoEntity<long>>
     {
+        /// <summary>
+        /// default constructor
+        /// </summary>
+        /// <param name="applicationLogTools"></param>
+        /// <param name="repository"></param>
+        /// <param name="mapper"></param>
         public WebsiteNavigationController(IApplicationLogTools applicationLogTools
                                          , IRepository<NavigationMenu, long> repository
                                          , IMapper mapper) : base(applicationLogTools, repository, mapper)
         {
         }
+
     }
 }

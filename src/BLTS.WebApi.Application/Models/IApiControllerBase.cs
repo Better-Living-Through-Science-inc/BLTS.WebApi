@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BLTS.WebApi.DtoModels
@@ -8,54 +9,67 @@ namespace BLTS.WebApi.DtoModels
         /// <summary>
         /// Get object by Primary key reference
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="primaryKey"></param>
         /// <returns></returns>
-        Task<TDtoEntity> GetById(TPrimaryKey input);
+         Task<ActionResult<TDtoEntity>> GetById(TPrimaryKey primaryKey);
+
+        /// <summary>
+        /// Get object collection by Primary key reference
+        /// </summary>
+        /// <param name="primaryKeyCollection"></param>
+        /// <returns></returns>
+        Task<ActionResult<List<TDtoEntity>>> GetAllById(List<TPrimaryKey> primaryKeyCollection);
+
         /// <summary>
         /// Get all objects in a sorted paged collection
         /// </summary>
-        /// <param name="sorting"></param>
+        /// <param name="sortRequest"></param>
         /// <param name="skipCount"></param>
         /// <param name="maxResultCount"></param>
         /// <returns></returns>
-        Task<PagedResultDtoEntity<TDtoEntity>> GetAll(string sortRequest = "Id desc", int skipCount = 0, int maxResultCount = 99);
+         Task<ActionResult<PagedResultDtoEntity<TDtoEntity>>> GetAll(string sortRequest = "Id desc", int skipCount = 0, int maxResultCount = 99);
+
         /// <summary>
         /// Get first object by partially populated object search
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="exampleSearchEntity"></param>
         /// <returns></returns>
-        Task<TDtoEntity> GetByExample(TDtoEntity input);
+        Task<ActionResult<TDtoEntity>> GetByExample(TDtoEntity exampleSearchEntity);
+
         /// <summary>
         /// Get all objects by partially populated object search in a sorted paged collection
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="exampleSearchEntityPagingRequest"></param>
         /// <returns></returns>
-        Task<PagedResultDtoEntity<TDtoEntity>> GetAllByExample(PagedResultRequestDtoEntity<TDtoEntity> pagingRequest);
+         Task<ActionResult<PagedResultDtoEntity<TDtoEntity>>> GetAllByExample(PagedResultRequestDtoEntity<TDtoEntity> exampleSearchEntityPagingRequest);
 
         /// <summary>
         /// Save object, insert will be performed where PK = null or default value, else update will be performed
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns>is success</returns>
-        Task<TDtoEntity> Save(TDtoEntity input);
+        /// <param name="saveEntity"></param>
+        /// <returns></returns>
+         Task<ActionResult<TDtoEntity>> Save(TDtoEntity saveEntity);
+
         /// <summary>
         /// Save object collection, insert will be performed where PK = null or default value, else update will be performed
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns>is success</returns>
-        Task<bool> SaveCollection(List<TDtoEntity> input);
+        /// <param name="saveEntityCollection"></param>
+        /// <returns></returns>
+         Task<ActionResult<bool>> SaveCollection(List<TDtoEntity> saveEntityCollection);
 
         /// <summary>
         /// Delete requested object by primary key
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns>is success</returns>
-        Task<bool> Delete(TPrimaryKey primaryKey, bool isSoftDelete = false);
+        /// <param name="primaryKey"></param>
+        /// <param name="isSoftDelete"></param>
+        /// <returns></returns>
+         Task<ActionResult<bool>> Delete(TPrimaryKey primaryKey, bool isSoftDelete = false);
+
         /// <summary>
-        /// Delete requested object collection by primary key
+        /// Delete requested collection of objects by primary key
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns>is success</returns>
-        Task<bool> DeleteCollection(List<TDeleteDtoEntity> input);
+        /// <param name="primaryKeyCollection"></param>
+        /// <returns></returns>
+        Task<ActionResult<bool>> DeleteCollection(List<TDeleteDtoEntity> primaryKeyCollection);
     }
 }

@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BLTS.WebApi.Logs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
-namespace BLTS.WebApi.Logs
+namespace BLTS.WebApi.ApiControllers
 {
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
@@ -12,6 +13,10 @@ namespace BLTS.WebApi.Logs
     {
         private readonly IApplicationLogTools _applicationLogTools;
 
+        /// <summary>
+        /// default constructor
+        /// </summary>
+        /// <param name="applicationLogTools"></param>
         public ApplicationLogController(IApplicationLogTools applicationLogTools)
         {
             _applicationLogTools = applicationLogTools;
@@ -27,7 +32,7 @@ namespace BLTS.WebApi.Logs
         [HttpPost]
         public async void LogInformation(long applicationId, string logText, string callerClassName = null, string callerMemberName = null)
         {
-            _applicationLogTools.LogInformation(logText, new Dictionary<string, dynamic> { { "ClassName", callerClassName }, { "ApplicationId" , applicationId } }, callerMemberName);
+            _applicationLogTools.LogInformation(logText, new Dictionary<string, dynamic> { { "ClassName", callerClassName }, { "ApplicationId", applicationId } }, callerMemberName);
         }
 
         [HttpPost]

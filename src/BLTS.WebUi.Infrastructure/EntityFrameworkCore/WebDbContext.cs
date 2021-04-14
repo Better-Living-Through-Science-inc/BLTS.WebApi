@@ -5,16 +5,30 @@ namespace BLTS.WebApi.Infrastructure.Database
 {
     public class WebDbContext : DbContext
     {
+        public WebDbContext()
+        {
+        }
+
+        public WebDbContext(DbContextOptions<WebDbContext> options)
+            : base(options)
+        {
+        }
+
+        public virtual DbSet<ActiveDirectoryGroup> ActiveDirectoryGroups { get; set; }
+        public virtual DbSet<ApplicationInfo> ApplicationInfos { get; set; }
         public virtual DbSet<ApplicationLog> ApplicationLogs { get; set; }
+        public virtual DbSet<ApplicationPermission> ApplicationPermissions { get; set; }
         public virtual DbSet<FileStorage> FileStorages { get; set; }
+        public virtual DbSet<FileStoragePermission> FileStoragePermissions { get; set; }
         public virtual DbSet<NavigationMenu> NavigationMenus { get; set; }
-        public virtual DbSet<NavigationMenuNavigationMenu> NavigationMenuNavigationMenus { get; set; }
         public virtual DbSet<OperationalConfiguration> OperationalConfigurations { get; set; }
         public virtual DbSet<WebpageContent> WebpageContents { get; set; }
-        public virtual DbSet<Application> Websites { get; set; }
+        public virtual DbSet<WebpageContentPermission> WebpageContentPermissions { get; set; }
+        public virtual DbSet<WebsiteInfo> WebsiteInfos { get; set; }
         public virtual DbSet<WebsiteNavigationMenu> WebsiteNavigationMenus { get; set; }
+        public virtual DbSet<WebsitePermission> WebsitePermissions { get; set; }
 
-        public WebDbContext(DbContextOptions<WebDbContext> options) : base(options)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
         }
 
@@ -22,17 +36,40 @@ namespace BLTS.WebApi.Infrastructure.Database
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            modelBuilder.Entity<Application>(entity =>
+            modelBuilder.Entity<ActiveDirectoryGroup>(entity =>
             {
-                entity.ToTable("Application", "dbo");
+                entity.ToTable("ActiveDirectoryGroup", "dbo");
 
-                entity.Property(e => e.Id).HasColumnName("ApplicationId");
+                entity.Property(e => e.Id).HasColumnName("ActiveDirectoryGroupId");
+
+                entity.Property(e => e.CreationDate).HasDefaultValueSql("(sysutcdatetime())");
+
+                entity.Property(e => e.GroupSid)
+                    .HasMaxLength(10)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.LastModificationDate).HasDefaultValueSql("(sysutcdatetime())");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(255);
+            });
+
+            modelBuilder.Entity<ApplicationInfo>(entity =>
+            {
+                entity.ToTable("ApplicationInfo", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("ApplicationInfoId");
 
                 entity.Property(e => e.CreationDate).HasDefaultValueSql("(sysutcdatetime())");
 
                 entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(255);
+
+                entity.Property(e => e.IsEnabled)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.LastModificationDate).HasDefaultValueSql("(sysutcdatetime())");
 
@@ -97,11 +134,38 @@ namespace BLTS.WebApi.Infrastructure.Database
 
                 entity.Property(e => e.NotificationDate).HasDefaultValueSql("(CONVERT([datetime2](7),'9999-12-31',(0)))");
 
-                entity.HasOne(d => d.Application)
+                entity.HasOne(d => d.ApplicationInfo)
                     .WithMany(p => p.ApplicationLogCollection)
-                    .HasForeignKey(d => d.ApplicationId)
+                    .HasForeignKey(d => d.ApplicationInfoId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ApplicationLog_Application");
+            });
+
+            modelBuilder.Entity<ApplicationPermission>(entity =>
+            {
+                entity.ToTable("ApplicationPermission", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("ApplicationPermissionId");
+
+                entity.Property(e => e.CreationDate).HasDefaultValueSql("(sysutcdatetime())");
+
+                entity.Property(e => e.IsEnabled)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.LastModificationDate).HasDefaultValueSql("(sysutcdatetime())");
+
+                entity.HasOne(d => d.ActiveDirectoryGroup)
+                    .WithMany(p => p.ApplicationPermissionCollection)
+                    .HasForeignKey(d => d.ActiveDirectoryGroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ApplicationPermission_ActiveDirectoryGroup");
+
+                entity.HasOne(d => d.ApplicationInfo)
+                    .WithMany(p => p.ApplicationPermissionCollection)
+                    .HasForeignKey(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ApplicationPermission_Application");
             });
 
             modelBuilder.Entity<FileStorage>(entity =>
@@ -133,6 +197,33 @@ namespace BLTS.WebApi.Infrastructure.Database
                     .HasMaxLength(255);
             });
 
+            modelBuilder.Entity<FileStoragePermission>(entity =>
+            {
+                entity.ToTable("FileStoragePermission", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("FileStoragePermissionId");
+
+                entity.Property(e => e.CreationDate).HasDefaultValueSql("(sysutcdatetime())");
+
+                entity.Property(e => e.IsEnabled)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.LastModificationDate).HasDefaultValueSql("(sysutcdatetime())");
+
+                entity.HasOne(d => d.ActiveDirectoryGroup)
+                    .WithMany(p => p.FileStoragePermissionCollection)
+                    .HasForeignKey(d => d.ActiveDirectoryGroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_FileStoragePermission_ActiveDirectoryGroup");
+
+                entity.HasOne(d => d.FileStorage)
+                    .WithMany(p => p.FileStoragePermissionCollection)
+                    .HasForeignKey(d => d.FileStorageId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_FileStoragePermission_FileStorage");
+            });
+
             modelBuilder.Entity<NavigationMenu>(entity =>
             {
                 entity.ToTable("NavigationMenu", "dbo");
@@ -140,6 +231,14 @@ namespace BLTS.WebApi.Infrastructure.Database
                 entity.Property(e => e.Id).HasColumnName("NavigationMenuId");
 
                 entity.Property(e => e.CreationDate).HasDefaultValueSql("(sysutcdatetime())");
+
+                entity.Property(e => e.ParentNavigationMenuId)
+                    .IsRequired()
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.NavLinkText)
+                    .IsRequired()
+                    .HasMaxLength(255);
 
                 entity.Property(e => e.DisplayText)
                     .IsRequired()
@@ -163,30 +262,16 @@ namespace BLTS.WebApi.Infrastructure.Database
                     .IsRequired()
                     .HasMaxLength(255);
 
+                entity.HasOne(d => d.ParentNavigationMenu)
+                    .WithMany(p => p.ChildNavigationMenuCollection)
+                    .HasForeignKey(d => d.ParentNavigationMenuId)
+                    .HasConstraintName("FK_NavigationMenu_NavigationMenu");
+
                 entity.HasOne(d => d.WebpageContent)
                     .WithMany(p => p.NavigationMenuCollection)
                     .HasForeignKey(d => d.WebpageContentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_NavigationMenu_WebpageContent");
-            });
-
-            modelBuilder.Entity<NavigationMenuNavigationMenu>(entity =>
-            {
-                entity.ToTable("NavigationMenuNavigationMenu", "dbo");
-
-                entity.HasKey(e => new { e.ParentNavigationMenuId, e.ChildNavigationMenuId });
-
-                entity.HasOne(d => d.ChildNavigationMenu)
-                    .WithMany(p => p.ChildNavigationMenuCollection)
-                    .HasForeignKey(d => d.ChildNavigationMenuId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_NavigationMenuNavigationMenu_NavigationMenu1");
-
-                entity.HasOne(d => d.ParentNavigationMenu)
-                    .WithMany(p => p.ParentNavigationMenuCollection)
-                    .HasForeignKey(d => d.ParentNavigationMenuId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_NavigationMenuNavigationMenu_NavigationMenu");
             });
 
             modelBuilder.Entity<OperationalConfiguration>(entity =>
@@ -217,9 +302,9 @@ namespace BLTS.WebApi.Infrastructure.Database
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.HasOne(d => d.Application)
+                entity.HasOne(d => d.ApplicationInfo)
                     .WithMany(p => p.OperationalConfigurationCollection)
-                    .HasForeignKey(d => d.ApplicationId)
+                    .HasForeignKey(d => d.ApplicationInfoId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OperationalConfiguration_Application");
             });
@@ -230,6 +315,8 @@ namespace BLTS.WebApi.Infrastructure.Database
 
                 entity.Property(e => e.Id).HasColumnName("WebpageContentId");
 
+                entity.Property(e => e.Body).IsRequired();
+
                 entity.Property(e => e.CreationDate).HasDefaultValueSql("(sysutcdatetime())");
 
                 entity.Property(e => e.Description).HasMaxLength(255);
@@ -238,14 +325,43 @@ namespace BLTS.WebApi.Infrastructure.Database
 
                 entity.Property(e => e.Metatag).HasMaxLength(255);
 
-                entity.Property(e => e.Title).HasMaxLength(255);
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(255);
             });
 
-            modelBuilder.Entity<Website>(entity =>
+            modelBuilder.Entity<WebpageContentPermission>(entity =>
             {
-                entity.ToTable("Website", "dbo");
+                entity.ToTable("WebpageContentPermission", "dbo");
 
-                entity.Property(e => e.Id).HasColumnName("WebsiteId");
+                entity.Property(e => e.Id).HasColumnName("WebpageContentPermissionId");
+
+                entity.Property(e => e.CreationDate).HasDefaultValueSql("(sysutcdatetime())");
+
+                entity.Property(e => e.IsEnabled)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.LastModificationDate).HasDefaultValueSql("(sysutcdatetime())");
+
+                entity.HasOne(d => d.ActiveDirectoryGroup)
+                    .WithMany(p => p.WebpageContentPermissionCollection)
+                    .HasForeignKey(d => d.ActiveDirectoryGroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_WebpageContentPermission_ActiveDirectoryGroup");
+
+                entity.HasOne(d => d.WebpageContent)
+                    .WithMany(p => p.WebpageContentPermissionCollection)
+                    .HasForeignKey(d => d.WebpageContentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_WebpageContentPermission_WebpageContent");
+            });
+
+            modelBuilder.Entity<WebsiteInfo>(entity =>
+            {
+                entity.ToTable("WebsiteInfo", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("WebsiteInfoId");
 
                 entity.Property(e => e.BaseUrl)
                     .IsRequired()
@@ -261,6 +377,10 @@ namespace BLTS.WebApi.Infrastructure.Database
 
                 entity.Property(e => e.Footer).IsRequired();
 
+                entity.Property(e => e.IsEnabled)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
                 entity.Property(e => e.LastModificationDate).HasDefaultValueSql("(sysutcdatetime())");
 
                 entity.Property(e => e.Metatag)
@@ -275,18 +395,45 @@ namespace BLTS.WebApi.Infrastructure.Database
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.HasOne(d => d.Application)
-                    .WithMany(p => p.WebsiteCollection)
-                    .HasForeignKey(d => d.ApplicationId)
+                entity.HasOne(d => d.ApplicationInfo)
+                    .WithMany(p => p.WebsiteInfoCollection)
+                    .HasForeignKey(d => d.ApplicationInfoId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Website_Application");
+            });
+
+            modelBuilder.Entity<WebsitePermission>(entity =>
+            {
+                entity.ToTable("WebsitePermission", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("WebsitePermissionId");
+
+                entity.Property(e => e.CreationDate).HasDefaultValueSql("(sysutcdatetime())");
+
+                entity.Property(e => e.IsEnabled)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.LastModificationDate).HasDefaultValueSql("(sysutcdatetime())");
+
+                entity.HasOne(d => d.ActiveDirectoryGroup)
+                    .WithMany(p => p.WebsitePermissionCollection)
+                    .HasForeignKey(d => d.ActiveDirectoryGroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_WebsitePermission_ActiveDirectoryGroup");
+
+                entity.HasOne(d => d.WebsiteInfo)
+                    .WithMany(p => p.WebsitePermissionCollection)
+                    .HasForeignKey(d => d.WebsiteInfoId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_WebsitePermission_Website");
             });
 
             modelBuilder.Entity<WebsiteNavigationMenu>(entity =>
             {
                 entity.ToTable("WebsiteNavigationMenu", "dbo");
 
-                entity.HasKey(e => new { e.WebsiteId, e.NavigationMenuId });
+                entity.HasKey(e => new { e.WebsiteInfoId, e.NavigationMenuId });
 
                 entity.HasOne(d => d.NavigationMenu)
                     .WithMany(p => p.WebsiteNavigationMenuCollection)
@@ -294,9 +441,9 @@ namespace BLTS.WebApi.Infrastructure.Database
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_WebsiteNavigationMenu_NavigationMenu");
 
-                entity.HasOne(d => d.Website)
+                entity.HasOne(d => d.WebsiteInfo)
                     .WithMany(p => p.WebsiteNavigationMenuCollection)
-                    .HasForeignKey(d => d.WebsiteId)
+                    .HasForeignKey(d => d.WebsiteInfoId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_WebsiteNavigationMenu_Website");
             });
@@ -305,7 +452,6 @@ namespace BLTS.WebApi.Infrastructure.Database
             /*Seed the DB*/
             WebDbContextBuilderExtensions.Seed(modelBuilder);
         }
-
 
 
     }

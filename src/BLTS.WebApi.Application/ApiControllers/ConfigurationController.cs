@@ -1,10 +1,14 @@
-﻿using BLTS.WebApi.DtoModels;
+﻿using BLTS.WebApi.Configurations;
+using BLTS.WebApi.DtoModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace BLTS.WebApi.Configurations
+namespace BLTS.WebApi.ApiControllers
 {
+    /// <summary>
+    /// Api access to configuration data
+    /// </summary>
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -13,6 +17,10 @@ namespace BLTS.WebApi.Configurations
     {
         private ConfigurationManager _configurationManager;
 
+        /// <summary>
+        /// default constructor
+        /// </summary>
+        /// <param name="configurationManager"></param>
         public ConfigurationController(ConfigurationManager configurationManager)
         {
             _configurationManager = configurationManager;
@@ -21,7 +29,8 @@ namespace BLTS.WebApi.Configurations
         /// <summary>
         /// Get a value from the config system
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="propertyName"></param>
+        /// <param name="applicationId"></param>
         /// <returns></returns>
         [HttpGet]
         public async Task<dynamic> Get(string propertyName, long applicationId)

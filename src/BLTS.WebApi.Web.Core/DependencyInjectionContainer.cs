@@ -6,6 +6,7 @@ using BLTS.WebApi.Infrastructure.Database;
 using BLTS.WebApi.Logs;
 using BLTS.WebApi.Models;
 using BLTS.WebApi.Utilities;
+using BLTS.WebApi.WebsiteNavigations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BLTS.WebApi.Web.Core
@@ -36,20 +37,28 @@ namespace BLTS.WebApi.Web.Core
             _services.AddTransient<ReflectionTools>();
             _services.AddTransient<StringUtilities>();
             _services.AddTransient<UnitConversionLogic>();
+            _services.AddTransient<WebsiteNavigationMenuManager>();
 
 
             /*DB Repository Models*/
-            _services.AddTransient<IRepository<Application, long>, Repository<Application, long, WebDbContext>>();
+            _services.AddTransient<IRepository<ActiveDirectoryGroup, long>, Repository<ActiveDirectoryGroup, long, WebDbContext>>();
+            _services.AddTransient<IRepository<ApplicationInfo, long>, Repository<ApplicationInfo, long, WebDbContext>>();
             _services.AddTransient<IRepository<ApplicationLog, long>, Repository<ApplicationLog, long, WebDbContext>>();
+            _services.AddTransient<IRepository<ApplicationPermission, long>, Repository<ApplicationPermission, long, WebDbContext>>();
             _services.AddTransient<IRepository<FileStorage, long>, Repository<FileStorage, long, WebDbContext>>();
+            _services.AddTransient<IRepository<FileStoragePermission, long>, Repository<FileStoragePermission, long, WebDbContext>>();
             _services.AddTransient<IRepository<NavigationMenu, long>, Repository<NavigationMenu, long, WebDbContext>>();
             _services.AddTransient<IRepository<OperationalConfiguration, long>, Repository<OperationalConfiguration, long, WebDbContext>>();
             _services.AddTransient<IRepository<WebpageContent, long>, Repository<WebpageContent, long, WebDbContext>>();
-            _services.AddTransient<IRepository<Website, long>, Repository<Website, long, WebDbContext>>();
+            _services.AddTransient<IRepository<WebpageContentPermission, long>, Repository<WebpageContentPermission, long, WebDbContext>>();
+            _services.AddTransient<IRepository<WebsiteInfo, long>, Repository<WebsiteInfo, long, WebDbContext>>();
+            _services.AddTransient<IRepository<WebsitePermission, long>, Repository<WebsitePermission, long, WebDbContext>>();
+            //NavigationMenuNavigationMenu
+            //WebsiteNavigationMenu
 
             /*Api Repository Models*/
             //_services.AddTransient<IApiRepository<Weather, WeatherDto, CreateUpdateWeatherDto, long>, ApiRepository<Weather, WeatherDto, CreateUpdateWeatherDto, long>>();
-
         }
+
     }
 }

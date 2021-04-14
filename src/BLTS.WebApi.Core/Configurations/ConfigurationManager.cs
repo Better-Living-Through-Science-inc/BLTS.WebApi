@@ -17,12 +17,12 @@ namespace BLTS.WebApi.Configurations
     public class ConfigurationManager
     {
         private IConfiguration _configuration;
-        private IRepository<Application, long> _repositoryApplication;
+        private IRepository<ApplicationInfo, long> _repositoryApplication;
         private IRepository<OperationalConfiguration, long> _repositoryOperationalConfiguration;
         private long _currentApplicationId;
 
         public ConfigurationManager(IConfiguration configuration
-                                  , IRepository<Application, long> repositoryApplication
+                                  , IRepository<ApplicationInfo, long> repositoryApplication
                                   , IRepository<OperationalConfiguration, long> repositoryOperationalConfiguration)
         {
             _configuration = configuration;
@@ -74,7 +74,7 @@ namespace BLTS.WebApi.Configurations
             #region load config data from DB storage
 
             //load application values
-            List<Application> applicationCollection = _repositoryApplication.GetAll().ItemCollection;
+            List<ApplicationInfo> applicationCollection = _repositoryApplication.GetAll().ItemCollection;
 
             applicationCollection.AsParallel()
                                  .ForAll(singleAppValue =>
@@ -94,7 +94,7 @@ namespace BLTS.WebApi.Configurations
 
             configurationColletion.AsParallel()
                                   .Where(singleConfigurationValue => singleConfigurationValue.IsConnectionString == false)
-                                  .ForAll(singleConfigurationValue => applicationVariableDictionary[singleConfigurationValue.ApplicationId].TryAdd(singleConfigurationValue.PropertyName,
+                                  .ForAll(singleConfigurationValue => applicationVariableDictionary[singleConfigurationValue.ApplicationInfoId].TryAdd(singleConfigurationValue.PropertyName,
                                                                                                                                                   (singleConfigurationValue.IntegerValue.HasValue) ? singleConfigurationValue.IntegerValue :
                                                                                                                                                   (singleConfigurationValue.StringValue != null) ? singleConfigurationValue.StringValue :
                                                                                                                                                   (singleConfigurationValue.BoolValue.HasValue) ? singleConfigurationValue.BoolValue :
@@ -107,7 +107,7 @@ namespace BLTS.WebApi.Configurations
 
             configurationColletion.AsParallel()
                                   .Where(singleConfigurationValue => singleConfigurationValue.IsConnectionString == true)
-                                  .ForAll(singleConfigurationValue => applicationVariableDictionary[singleConfigurationValue.ApplicationId]["ConnectionStrings"].TryAdd(singleConfigurationValue.PropertyName, singleConfigurationValue.StringValue));
+                                  .ForAll(singleConfigurationValue => applicationVariableDictionary[singleConfigurationValue.ApplicationInfoId]["ConnectionStrings"].TryAdd(singleConfigurationValue.PropertyName, singleConfigurationValue.StringValue));
 
             configurationColletion = null;
             #endregion
