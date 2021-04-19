@@ -17,6 +17,9 @@
     <RootNamespace>BLTS.WebApi</RootNamespace>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
@@ -24,6 +27,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BLTS.WebApi.Application\BLTS.WebApi.Application.csproj" />
-    <ProjectReference Include="..\BLTS.WebUi.Infrastructure\BLTS.WebUi.Infrastructure.csproj" />
+    <ProjectReference Include="..\BLTS.WebApi.Infrastructure\BLTS.WebApi.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

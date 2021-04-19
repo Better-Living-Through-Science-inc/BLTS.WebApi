@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLTS.WebApi.Web.Core", "src\BLTS.WebApi.Web.Core\BLTS.WebApi.Web.Core.csproj", "{0E45B781-2F4E-4C11-A8D9-C85B342F7480}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLTS.WebUi.Infrastructure", "src\BLTS.WebUi.Infrastructure\BLTS.WebUi.Infrastructure.csproj", "{2932A529-B38D-44EC-B24C-0459A10E088F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLTS.WebApi.Infrastructure", "src\BLTS.WebApi.Infrastructure\BLTS.WebApi.Infrastructure.csproj", "{2932A529-B38D-44EC-B24C-0459A10E088F}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "BLTS.WebApi.Database", "src\BLTS.WebApi.Database\BLTS.WebApi.Database.sqlproj", "{36C35FED-E104-4AD5-9BCD-55C67BF85DFC}"
 EndProject

@@ -366,5 +366,18 @@ namespace BLTS.WebApi.ApiControllers
                 throw;
             }
         }
+
+        internal virtual IPagedResultEntity<TEntity> MapToPagedResultEntity(PagedResultDtoEntity<TDtoEntity> pagedResultDtoEntity)
+        {
+            try
+            {
+                return _mapper.Map<IPagedResultEntity<TEntity>>(pagedResultDtoEntity);
+            }
+            catch (Exception apiRepositoryError)
+            {
+                _applicationLogTools.LogError(apiRepositoryError, new Dictionary<string, dynamic> { { "ClassName", $"WebApi.ApiControllerBase<{typeof(TEntity).Name}>" } });
+                throw;
+            }
+        }
     }
 }

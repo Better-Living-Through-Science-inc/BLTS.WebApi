@@ -77,25 +77,47 @@ SET IDENTITY_INSERT [dbo].[NavigationMenu] ON
 MERGE [dbo].[NavigationMenu] AS TARGET
 USING (
 
-          SELECT 0 AS [NavigationMenuId], 0 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Default Top Level' AS [DisplayText], 0 AS [DisplayOrder], N'Non displayed menu item as PK holder for top level menu items non-null FK' AS [ToolTip], N'/' AS [SubPath], N'' AS [IconClass], 0 AS [IsEnabled], '9999-12-31' AS [CreationDate], '9999-12-31' AS [LastModificationDate], 0 AS [IsDeleted]
-UNION ALL SELECT 1 AS [NavigationMenuId], 0 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Home Page' AS [DisplayText], 0 AS [DisplayOrder], N'Better Living Through Science' AS [ToolTip], N'/' AS [SubPath], N'nav-icon fas fa-home' AS [IconClass], 1 AS [IsEnabled], '2021-04-12 18:50:33.2335054' AS [CreationDate], '2021-04-12 18:50:33.2335054' AS [LastModificationDate], 0 AS [IsDeleted]
-UNION ALL SELECT 2 AS [NavigationMenuId], 0 AS [ParentNavigationMenuId], 2 AS [WebpageContentId], N'Research Initiative' AS [DisplayText], 1 AS [DisplayOrder], N'Research Initiative' AS [ToolTip], N'/Research' AS [SubPath], N'nav-icon fas fa-book' AS [IconClass], 1 AS [IsEnabled], '2021-04-13 01:10:53.3548174' AS [CreationDate], '2021-04-13 01:10:53.3548174' AS [LastModificationDate], 0 AS [IsDeleted]
-UNION ALL SELECT 3 AS [NavigationMenuId], 2 AS [ParentNavigationMenuId], 2 AS [WebpageContentId], N'Research Philosophy' AS [DisplayText], 0 AS [DisplayOrder], N'Research Philosophy' AS [ToolTip], N'/Research' AS [SubPath], N'nav-icon fas fa-star' AS [IconClass], 1 AS [IsEnabled], '2021-04-13 15:12:40.6851491' AS [CreationDate], '2021-04-13 15:12:40.6851491' AS [LastModificationDate], 0 AS [IsDeleted]
-UNION ALL SELECT 4 AS [NavigationMenuId], 2 AS [ParentNavigationMenuId], 3 AS [WebpageContentId], N'Atomic Manufacturing' AS [DisplayText], 1 AS [DisplayOrder], N'Atomic Manufacturing' AS [ToolTip], N'/Research/Atomic' AS [SubPath], N'nav-icon fas fa-atom' AS [IconClass], 1 AS [IsEnabled], '2021-04-13 15:38:02.7243662' AS [CreationDate], '2021-04-13 15:38:02.7243662' AS [LastModificationDate], 0 AS [IsDeleted]
-UNION ALL SELECT 5 AS [NavigationMenuId], 2 AS [ParentNavigationMenuId], 4 AS [WebpageContentId], N'Biophysics' AS [DisplayText], 2 AS [DisplayOrder], N'Biophysics' AS [ToolTip], N'/Research/Biophysics' AS [SubPath], N'nav-icon fas fa-dna' AS [IconClass], 1 AS [IsEnabled], '2021-04-13 15:42:40.0540349' AS [CreationDate], '2021-04-13 15:42:40.0540349' AS [LastModificationDate], 0 AS [IsDeleted]
+          SELECT 0 AS [NavigationMenuId], 0 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Default Top Level' AS [DisplayText], 0 AS [DisplayOrder], N'Non displayed menu item as PK holder for top level menu items non-null FK' AS [ToolTip], N'/' AS [SubPath], N'' AS [IconClass], N'All' AS [NavLinkText], 0 AS [IsEnabled]
+UNION ALL SELECT 1 AS [NavigationMenuId], 0 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Home Page' AS [DisplayText], 0 AS [DisplayOrder], N'Better Living Through Science' AS [ToolTip], N'/' AS [SubPath], N'nav-icon fas fa-home' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+
+UNION ALL SELECT 2 AS [NavigationMenuId], 0 AS [ParentNavigationMenuId], 2 AS [WebpageContentId], N'Research Initiative' AS [DisplayText], 1 AS [DisplayOrder], N'Research Initiative' AS [ToolTip], N'/Research' AS [SubPath], N'nav-icon fas fa-book' AS [IconClass], N'Prefix' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 3 AS [NavigationMenuId], 2 AS [ParentNavigationMenuId], 2 AS [WebpageContentId], N'Research Philosophy' AS [DisplayText], 0 AS [DisplayOrder], N'Research Philosophy' AS [ToolTip], N'/Research' AS [SubPath], N'nav-icon fas fa-star' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 4 AS [NavigationMenuId], 2 AS [ParentNavigationMenuId], 3 AS [WebpageContentId], N'Atomic Manufacturing' AS [DisplayText], 1 AS [DisplayOrder], N'Atomic Manufacturing' AS [ToolTip], N'/Research/Atomic' AS [SubPath], N'nav-icon fas fa-atom' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 5 AS [NavigationMenuId], 2 AS [ParentNavigationMenuId], 4 AS [WebpageContentId], N'Biophysics' AS [DisplayText], 2 AS [DisplayOrder], N'Biophysics' AS [ToolTip], N'/Research/Biophysics' AS [SubPath], N'nav-icon fas fa-dna' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 6 AS [NavigationMenuId], 2 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Hardware Engineering' AS [DisplayText], 3 AS [DisplayOrder], N'Hardware Engineering' AS [ToolTip], N'/Research/Hardware' AS [SubPath], N'nav-icon fas fa-microchip' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 7 AS [NavigationMenuId], 2 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Neurophysics' AS [DisplayText], 4 AS [DisplayOrder], N'Neurophysics' AS [ToolTip], N'/Research/Neurophysics' AS [SubPath], N'nav-icon fas fa-brain' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 8 AS [NavigationMenuId], 2 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Software Engineering' AS [DisplayText], 5 AS [DisplayOrder], N'Software Engineering' AS [ToolTip], N'/Research/Software' AS [SubPath], N'nav-icon fas fa-hat-wizard' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+
+UNION ALL SELECT 9 AS [NavigationMenuId], 0 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Community Outreach' AS [DisplayText], 2 AS [DisplayOrder], N'Community Outreach' AS [ToolTip], N'/Outreach' AS [SubPath], N'nav-icon fas fa-hand-holding-heart' AS [IconClass], N'Prefix' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 10 AS [NavigationMenuId], 9 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Outreach Philosophy' AS [DisplayText], 0 AS [DisplayOrder], N'Outreach Philosophy' AS [ToolTip], N'/Outreach' AS [SubPath], N'nav-icon fas fa-heart' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 11 AS [NavigationMenuId], 9 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'After School Programs' AS [DisplayText], 1 AS [DisplayOrder], N'After School Programs' AS [ToolTip], N'/Outreach/AfterSchool' AS [SubPath], N'nav-icon fas fa-theater-masks' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 12 AS [NavigationMenuId], 9 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Educational Facilities' AS [DisplayText], 2 AS [DisplayOrder], N'Educational Facilities' AS [ToolTip], N'/Outreach/EducationalFacility' AS [SubPath], N'nav-icon fas fa-school' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 13 AS [NavigationMenuId], 9 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Educational Supplies' AS [DisplayText], 3 AS [DisplayOrder], N'Educational Supplies' AS [ToolTip], N'/Outreach/EducationalSupply' AS [SubPath], N'nav-icon fas fa-book-reader' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 14 AS [NavigationMenuId], 9 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Student Lunch Program' AS [DisplayText], 4 AS [DisplayOrder], N'Student Lunch Program' AS [ToolTip], N'/Outreach/StudentLunch' AS [SubPath], N'nav-icon fas fa-utensils' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 15 AS [NavigationMenuId], 9 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Teacher Recruitment' AS [DisplayText], 5 AS [DisplayOrder], N'Teacher Recruitment' AS [ToolTip], N'/Outreach/TeacherRecruitment' AS [SubPath], N'nav-icon fas fa-chalkboard-teacher' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 16 AS [NavigationMenuId], 9 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Vaccine Program' AS [DisplayText], 6 AS [DisplayOrder], N'Vaccine Program' AS [ToolTip], N'/Outreach/Vaccine' AS [SubPath], N'nav-icon fas fa-syringe' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+
+UNION ALL SELECT 17 AS [NavigationMenuId], 0 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Information' AS [DisplayText], 3 AS [DisplayOrder], N'Information' AS [ToolTip], N'/About' AS [SubPath], N'nav-icon fas fa-info-circle' AS [IconClass], N'Prefix' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 18 AS [NavigationMenuId], 17 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'About' AS [DisplayText], 0 AS [DisplayOrder], N'About' AS [ToolTip], N'/About' AS [SubPath], N'nav-icon fas fa-question-circle' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 19 AS [NavigationMenuId], 17 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Budget' AS [DisplayText], 1 AS [DisplayOrder], N'Budget' AS [ToolTip], N'/About/Budget' AS [SubPath], N'nav-icon fas fa-file-invoice-dollar' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 20 AS [NavigationMenuId], 17 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Contact' AS [DisplayText], 2 AS [DisplayOrder], N'Contact' AS [ToolTip], N'/About/Contact' AS [SubPath], N'nav-icon fas fa-address-card' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 21 AS [NavigationMenuId], 17 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Core Values' AS [DisplayText], 3 AS [DisplayOrder], N'Core Values' AS [ToolTip], N'/About/CoreValues' AS [SubPath], N'nav-icon fas fa-star' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 22 AS [NavigationMenuId], 17 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Employee Recruitment' AS [DisplayText], 4 AS [DisplayOrder], N'Employee Recruitment' AS [ToolTip], N'/About/EmployeeRecruitment' AS [SubPath], N'nav-icon fas fa-pizza-slice' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
+UNION ALL SELECT 23 AS [NavigationMenuId], 17 AS [ParentNavigationMenuId], 1 AS [WebpageContentId], N'Organization' AS [DisplayText], 5 AS [DisplayOrder], N'Organization' AS [ToolTip], N'/About/Organization' AS [SubPath], N'nav-icon fas fa-sitemap' AS [IconClass], N'All' AS [NavLinkText], 1 AS [IsEnabled]
 
 ) AS SOURCE
 ON TARGET.[NavigationMenuId] = SOURCE.[NavigationMenuId]
 WHEN NOT MATCHED BY TARGET
 THEN
-  INSERT ([NavigationMenuId],[ParentNavigationMenuId],[WebpageContentId],[DisplayText],[DisplayOrder],[ToolTip],[SubPath],[IconClass],[IsEnabled],[CreationDate],[LastModificationDate],[IsDeleted])
-  VALUES (SOURCE.[NavigationMenuId],SOURCE.[ParentNavigationMenuId],SOURCE.[WebpageContentId],SOURCE.[DisplayText],SOURCE.[DisplayOrder],SOURCE.[ToolTip],SOURCE.[SubPath],SOURCE.[IconClass],SOURCE.[IsEnabled],SOURCE.[CreationDate],SOURCE.[LastModificationDate],SOURCE.[IsDeleted])
+  INSERT ([NavigationMenuId],[ParentNavigationMenuId],[WebpageContentId],[DisplayText],[DisplayOrder],[ToolTip],[SubPath],[IconClass],[NavLinkText],[IsEnabled])
+  VALUES (SOURCE.[NavigationMenuId],SOURCE.[ParentNavigationMenuId],SOURCE.[WebpageContentId],SOURCE.[DisplayText],SOURCE.[DisplayOrder],SOURCE.[ToolTip],SOURCE.[SubPath],SOURCE.[IconClass],SOURCE.[NavLinkText],SOURCE.[IsEnabled])
 WHEN MATCHED
 THEN
-  UPDATE SET TARGET.[ParentNavigationMenuId] = SOURCE.[ParentNavigationMenuId],TARGET.[WebpageContentId] = SOURCE.[WebpageContentId],TARGET.[DisplayText] = SOURCE.[DisplayText],TARGET.[DisplayOrder] = SOURCE.[DisplayOrder],TARGET.[ToolTip] = SOURCE.[ToolTip],TARGET.[SubPath] = SOURCE.[SubPath],TARGET.[IconClass] = SOURCE.[IconClass],TARGET.[IsEnabled] = SOURCE.[IsEnabled],TARGET.[CreationDate] = SOURCE.[CreationDate],TARGET.[LastModificationDate] = SOURCE.[LastModificationDate],TARGET.[IsDeleted] = SOURCE.[IsDeleted]
-WHEN NOT MATCHED BY SOURCE
+  UPDATE SET TARGET.[ParentNavigationMenuId] = SOURCE.[ParentNavigationMenuId],TARGET.[WebpageContentId] = SOURCE.[WebpageContentId],TARGET.[DisplayText] = SOURCE.[DisplayText],TARGET.[DisplayOrder] = SOURCE.[DisplayOrder],TARGET.[ToolTip] = SOURCE.[ToolTip],TARGET.[SubPath] = SOURCE.[SubPath],TARGET.[IconClass] = SOURCE.[IconClass],TARGET.[NavLinkText] = SOURCE.[NavLinkText],TARGET.[IsEnabled] = SOURCE.[IsEnabled]
+  WHEN NOT MATCHED BY SOURCE
 THEN
   DELETE;
+
 SET IDENTITY_INSERT [dbo].[NavigationMenu] OFF
 GO
 
@@ -106,7 +128,23 @@ USING (
 UNION ALL SELECT 1 AS [WebsiteInfoId], 2 AS [NavigationMenuId]
 UNION ALL SELECT 1 AS [WebsiteInfoId], 3 AS [NavigationMenuId]
 UNION ALL SELECT 1 AS [WebsiteInfoId], 4 AS [NavigationMenuId]
-UNION ALL SELECT 1 AS [WebsiteInfoId], 5 AS [NavigationMenuId]
+UNION ALL SELECT 1 AS [WebsiteInfoId], 6 AS [NavigationMenuId]
+UNION ALL SELECT 1 AS [WebsiteInfoId], 7 AS [NavigationMenuId]
+UNION ALL SELECT 1 AS [WebsiteInfoId], 8 AS [NavigationMenuId]
+UNION ALL SELECT 1 AS [WebsiteInfoId], 9 AS [NavigationMenuId]
+UNION ALL SELECT 1 AS [WebsiteInfoId], 10 AS [NavigationMenuId]
+UNION ALL SELECT 1 AS [WebsiteInfoId], 11 AS [NavigationMenuId]
+UNION ALL SELECT 1 AS [WebsiteInfoId], 12 AS [NavigationMenuId]
+UNION ALL SELECT 1 AS [WebsiteInfoId], 13 AS [NavigationMenuId]
+UNION ALL SELECT 1 AS [WebsiteInfoId], 14 AS [NavigationMenuId]
+UNION ALL SELECT 1 AS [WebsiteInfoId], 16 AS [NavigationMenuId]
+UNION ALL SELECT 1 AS [WebsiteInfoId], 17 AS [NavigationMenuId]
+UNION ALL SELECT 1 AS [WebsiteInfoId], 18 AS [NavigationMenuId]
+UNION ALL SELECT 1 AS [WebsiteInfoId], 19 AS [NavigationMenuId]
+UNION ALL SELECT 1 AS [WebsiteInfoId], 20 AS [NavigationMenuId]
+UNION ALL SELECT 1 AS [WebsiteInfoId], 21 AS [NavigationMenuId]
+UNION ALL SELECT 1 AS [WebsiteInfoId], 22 AS [NavigationMenuId]
+UNION ALL SELECT 1 AS [WebsiteInfoId], 23 AS [NavigationMenuId]
 
 ) AS SOURCE
 ON TARGET.[WebsiteInfoId] = SOURCE.[WebsiteInfoId] AND TARGET.[NavigationMenuId] = SOURCE.[NavigationMenuId]
@@ -121,6 +159,7 @@ WHEN NOT MATCHED BY SOURCE
 THEN
   DELETE;
 GO
+
 
 
 
